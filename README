@@ -1,0 +1,253 @@
+************************************************************************
+* README: Rog-O-Matic XIV (CMU) Tue Feb  5 14:04:02 1985 - mlm
+* Copyright (C) 1985 by A. Appel, G. Jacobson, L. Hamey, and M. Mauldin
+************************************************************************
+
+* Here is Rog-O-Matic XIV, the automatic Rogue player for the eighties! *
+
+1.0 UNPACKING:
+
+Rog-O-Matic is shipped by mail as a collection of shell archives.  Run
+the distribution files through the shell (e.g. "sh rgm14.01"), and the
+individual source files will be created.  Rog-O-Matic is also stored on
+the General Purpose Vax at Carnegie-Mellon University, and may be
+retrieved via FTP using the following file name:
+
+		mlm/rgm/rgm14.tar.Z @ G.CS.CMU.EDU	
+
+This file is a compressed tar format file.  For FTP access, the
+username is 'ftpguest' and the password is 'cmunix'.
+
+2.0 INSTRUCTIONS FOR USE:
+
+Tear along the dotted line and put all files into a directory. You should
+have the following files:
+
+	Bugreport     findscore.c   main.c        rogomatic.6   survival.c
+	README        gene.c        makefile      rooms.c       tactics.c
+	arms.c        globals.h     mess.c        rplot         termtokens.h
+	command.c     histplot.c    monsters.c    scorefile.c   things.c
+	database.c    install.h     pack.c        search.c      titlepage.c
+	datesub.l     io.c          rand.c        setup.c       types.h
+	debug.c       learn.c       replay.c      stats.c       utility.c
+	explore.c     ltm.c         rgmplot.c     strategy.c    worth.c
+
+Bugreport contains descriptions of any known bugs and patches to fix them.
+Main.c is the main file of Rog-O-Matic, and contains descriptions of all
+other files.  Install.h contains the installation dependent preprocessor
+variables. 
+
+Edit "install.h" to set up various log files and directories, and then
+create the RGMDIR directory, making certain that it is publicly readable
+and writable.  After that, the 'make' command will build your own
+personalized automatic Rogue playing system!
+
+The preprocessor variables defined are:
+
+BEST:           The compile time copy of the best current score. 
+		Now 43,402 (against 3.6) and 7935 (against 5.2),
+		and 11,316, total winner (against Rogue 5.3).
+BOGUS:          The highest score to be considered "reasonable" by
+                Rog-O-Matic. Rog-O-Matic will only try to beat non-bogus
+                scores. Currently set at 50,000.
+ERRORLOG:	A fully qualified filename to which snapshots of game
+		positions are appended when severe or fatal bugs/
+                inconsistencies are found.
+LOCKFILE:	A file name in in the /tmp directory used to serialize
+		accesses to the score file.
+MAXLOCK:	A number of seconds after which to ignore the lock file.
+		Usually 3 minutes (120 seconds).
+NEWROGUE:	On systems where the default Rogue is 3.6, this is the
+		name of the Rogue 5.2 or Rogue 5.3 file.
+PLAYER:         This is the file name of the player program, which is
+                execl'ed by the rogomatic program. It should be fully
+                qualified.
+RGMDIR:		The name of the directory where the Rog-O-Matic gene pool,
+		long term memory, and score files are kept.  It must be 
+		publicly readable and writeable.  This directory must
+		be created by hand.
+ROGUE:          This is the file name of the Rogue game. Usually this is
+                /usr/games/rogue.
+ROGUELOG:       When the game logging (or "echoing") is enabled, a
+		complete transcript of the game is written to this
+		file.  If the program finishes normally, this file
+		will be renamed to <killer>.<level>.<score>, and can 
+		either be examined by "cat"ing it or replayed using the
+		"-p" option of rogomatic. This should be an unqualified
+		file name.
+SNAPSHOT:	An unqualified file name where game snapshots are put.
+		The 'snapshot' command appends game photos to this file
+		in the user's directory.
+
+After "make"ing, you should have the following programs:
+
+        rogomatic  player  datesub  rgmplot  histplot gene
+
+and the shell script:
+
+        rplot
+
+
+These should be put into the games directory, in such a way that the player
+program has the same name as that specified by the PLAYER variable in
+install. Otherwise, you will have to "cd" to the directory containing
+Rogomatic to play.
+
+3.0 DESCRIPTIONS OF THE PROGRAMS AND COMMANDS.
+
+3.1 ROGOMATIC
+
+    The files "rogomatic" and "player" contain the basic Rog-O-Matic.
+    Rogomatic parses the arguments and forks and execs Rogue and Player.
+    For more information about the "rogomatic" command, see rogomatic.6.
+
+    Usage:	rogomatic [-ceuw]			Play a game
+	of	rogomatic -f game_file			Play against game_file
+	or	rogomatic -r [ rogue_save_file ]	Start saved game
+	or	rogomatic -p [ game_log ]		Replay game log
+    	or	rogomatic -s [ version ]		Show scores
+
+	-c	Cheat (look for magic arrows, version 3.6 only)
+	-e	Echo, log the game into a file
+	-u	Start up in user (transparent mode)
+	-w	Watched (Rog-O-Matic can ask user for help when stuck -- rare)
+	-f	next argument is the location of the Rogue game, eg:
+			rogomatic -f /usr/games/rogue
+	-r	Start a saved game, if next argument is given, it is the
+		location of the Rogue save file.
+	-p	Replay a Rog-O-Matic log file (created using the -e
+		option).  If next argument is given it is the name of
+		the log file. The default is "roguelog". Eg:
+			rogomatic -p drag.24.7361
+	-s	List Rog-O_Matic's scorefile.  Version must be one
+		of (3.6, 5.2, 5.3).  Defaults to install.h:DEFVER.
+
+3.2 RPLOT
+
+    "rplot" prints a scatter plot of the rogomatic score file. Options
+    allow for inclusion of scores obtained by cheating and addition of
+    a rolling average to the plot.  "rplot" uses the rgmplot program.
+
+    Usage:	rogomatic -s [ version ] | rplot [ -ac ] [ minimum ]
+
+    Options:	-a	Include rolling average
+		-c	Include scores obtained by cheating ( 3.6 only )
+		[ min ]	Include only scores above min.
+	
+3.3 HISTPLOT
+
+    "histplot" reads the scorefile and produces a histogram of either
+    final score or level reached, depending on the option set.  The
+    histogram plots the killing monster for each game.
+
+    Usage:	rogomatic -s [ version ] | histplot [ -acl ]
+
+    Options:	-aNNNN	Include only scores above NNNN
+		-c	Include cheating games ( 3.6 only )
+		-l	Plot level instead of score
+
+3.4 GENE
+
+    "gene" summarizes and initializes the current gene pool.
+    
+    Usage:	gene [ -f ] [ -v<value> ]	Read gene pool
+	or	gene -i [ -msv<value> ]		Create new gene pool
+
+    Options:	-i	Initial a new gene pool
+		-f	Full listing, shows gene values and scores
+		-mNN	Max gene pool size (limit of 100, learn.c:MAXM)
+		-s	Random number seed for new gene pool (-i option)
+		-v	Version to list/initial (one of 361,362,521,522,531)
+
+4.0 MORE ABOUT FILES
+
+4.1 SCOREFILES
+
+For each version of Rogue the systems has played, their are 2 score
+files: $RGMDIR/rgmdelta<version> and $RGMDIR/rgmscore<version>.  As
+each game is played, the score is appended to the DELTA file.  Whenever
+the -s option is given, a check is made for the DELTA file.  If new
+scores exist, they are sorted and a new SCORE file is created. Then
+the score file is printed on stdout.
+
+4.2 READING THE SOURCE
+
+   For those perusing the source, the following files are in the
+source.  The notes indicate how important an understanding of that file
+is to understanding the strategy Rogomatic uses, and whether that file
+contains system code, strategy code, or utility code.
+
+	Importance:	0..9  (9 must read, 0 never look at it)
+
+	Classes:	(strat) = strategy,
+			(tact)  = tactics,
+			(mech)  = mechanics,
+			(util)  = utility
+
+       Importance	File		
+       Class:	  	Name:		Description:
+
+ 	9 (mech)	install.h:	Must edit to run Rogomatic
+	9 (mech)	main.c:		Main file, references everything else
+	9 (strat)	strategy.c:	Top level strategy
+	8 (strat,tact)	tactics.c:	More insteresting production rules
+	7 (mech)	globals.h:	Description of globals
+	7 (mech)	types.h:	More description of globals
+	7 (mech)	setup.c:	Main program, forks & execs Rogue, Rgm
+	7 (tact)	arms.c:		Rules: worth of armor, weapons, rings
+	7 (tact)	worth.c:	Rules about worth of objects
+	6 (mech)	mess.c:		Handles message from Rogue
+	6 (strat,mech)	explore.c:	Defines exploration strategy
+	5 (mech)	rooms.c:	Builds terrain map
+	4 (mech)	io.c:		Handles communications from Rogue
+	4 (mech)	search.c:	Does path planning
+	4 (mech)	things.c:	Handles objects in pack
+	3 (mech)	command.c:	Sends commands to Rogue
+	3 (tact,mech)	survival.c:	Code for running away from monsters
+	2 (mech)	scorefile.c:	Handles Rogomatic scoreboard
+	2 (util)	database.c:	Remembers objects and their names
+	2 (util)	findscore.c:	Reads Rogue scoreboard
+	1 (mech)	monsters.c:	Keeps track of monsters on level
+	1 (util)	debug.c:	Debugging handler (error logger)
+	0 (mech)	replay.c:	Finds levels in log files
+	0 (mech)	termtokens.h:	Contains definitions for terminal
+	0 (mech)	titlepage.c:	Prints animated copyright notice
+	0 (util)	histplot.c:	Plots histograms of Rgm performance
+	0 (mech)	rgmplot.c:	Plots Rgm performance over time
+	0 (util)	utility.c:	Contains CMU specific system functions
+
+5.0 NET ADDRESS
+
+Questions, comments, gripes, and ephemera to
+
+        Michael.Mauldin@CAD.CS.CMU.EDU
+
+	Michael Mauldin (Fuzzy)		(412) 268-3065
+	Department of Computer Science
+	Carnegie-Mellon University
+	Pittsburgh, PA  15213
+
+6.0 MORE INFORMATION
+
+    Copies of CMU Technical Report CMU-CS-83-144, "ROG-O-MATIC:
+    A Belligerent Expert System" may be obtained by sending mail
+    to Michael Mauldin at the above addresses.  Since these will
+    be sent by US Post, you must include your US Mail address.
+
+    ROG-O-MATIC: A Belligerent Expert System    (CMU-CS-83-144)   ABSTRACT
+
+   "Rog-O-Matic  is  an  unusual combination of algorithmic and production
+    systems programming techniques which cooperate to  explore  a  hostile
+    environment. This environment is the computer game Rogue, which offers
+    several  advantages  for  studying  exploration  tasks.    This  paper
+    presents the major features of the Rog-O-Matic system,  the  types  of
+    knowledge  sources  and  rules  used  to  control the exploration, and
+    compares the performance of the system with human Rogue players."
+
+    An  abbreviated  but more recent version of this paper appeared in the
+    conference proceedings of CSCSI in May of 1984.
+    
+    A short reference to  Rog-O-Matic  also appeared in the  February 1985
+    Computer Recreations column of Scientific American, page 18-21.
+
+---end of Rog-O-Matic XIV description---

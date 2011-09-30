@@ -1,0 +1,389 @@
+.TH ROGOMATIC 6 02/01/85
+.UC 4
+.SH NAME
+rogomatic \- Automatically Exploring The Dungeons of Doom
+.SH SYNOPSIS
+.I rogomatic
+[
+.I -cefprstuw
+or
+.I save_file
+]
+.SH DESCRIPTION
+.PP
+.I Rog-O-Matic
+is a computer fantasy game with a newer twist.  It is crt oriented and the
+object of the game is to automatically survive the attacks of various
+monsters and get a lot of gold, rather than having to actually type the
+required commands yourself.
+.PP
+Once you have entered the world of 
+.I Rog-O-Matic
+you will stay there, passively watching the game unfold before you much
+like a catatonic teenager watching television.
+Should you wish to intervene, type the 
+.B t
+command and 
+.I Rog-O-Matic
+will enter transparent mode. Here you can type several commands, the
+most useful of which is the
+.B ?
+command, which prints out the next help line. Press the 
+.B ?
+key repeatedly to see all of the help. 
+Some useful commands are:
+.B h
+.B j
+.B k
+.B l
+.B H
+.B J
+.B K
+.B L
+.B b
+.B n
+.B y
+.B u
+.B f
+.B s
+.B >
+.B <
+.B S
+.B Q.
+These have the same meaning as in normal Rogue. To return to 
+.I Rog-O-Matic
+mode, type the 
+.B t
+command again.
+.PP
+Some useful commands are:
+.TP
+.B t
+.I Toggle,
+toggles the setting of the
+.I transparent
+mode flag. In transparent mode, 
+.I Rog-O-Matic
+will not automatically attack monsters, pick up treasure, or explore
+around.  Unfortunately, there is no way to enter complicated commands
+like 
+.I quaff
+or
+.I read
+in transparent mode.  Typing any 
+.I Rogue
+command, or single-step command also enables transparent mode.
+.TP
+.B Q
+.I Quit,
+tells 
+.I Rog-O-Matic 
+to quit the game. The score is logged in the score file, and possibly the
+.I Rogue
+top ten, and the game is terminated.
+.TP
+.B S
+.I Save,
+the game is saved to the default save file, set by the
+.I <file>
+argument to 
+.I rogomatic
+or the 
+.I ROGUEOPTS
+environment variable. The game may be restarted later.
+.TP
+.B c
+.I Cheat,
+tells 
+.I Rog-O-Matic
+to take advantage of idiosyncracies in the
+.I Rogue
+game to get a higher score. This is unfortunately necessary to allow fair
+competition with other human top ten players who take advantage of the same
+bugs. Note that this option should only be used on the Unix version
+of Rogue, since the VMS version does not exhibit the same bugs.
+Note too that when playing against 
+.I Rogue 5.2
+and
+.I Rogue 5.3
+no cheating is done, since the bugs are not widely known and used by
+human competition.
+.TP
+.B d
+.I Debugging,
+toggles the debugging flag, which is useless to non-wizard
+players (although it is entertaining if your terminal has reverse video).
+.TP
+.B e
+.I Echoing,
+causes a copy of the game to be written to file 
+.I roguelog
+in the current directory. Typing 
+.B e
+a second time closes the log file.  When the game is ended, the roguelog
+file is renamed to <killer>.<level>.<score> so if a troll killed poor
+.I Rog-O-Matic
+on level 14 leaving him with a score of 3088, the file would be named
+.I trol.14.3088.
+Note that only the first four characters of the killer are used.
+The
+.B -p
+option will replay a saved game.  Additionally, a stop action command
+(carriage return gives a single step) has been added.  Pigs didn't fly
+first!
+.TP
+.B i
+.I Inventory,
+dumps the current inventory on the screen.
+.TP
+.B m
+.I Monster list,
+shows the current long term memory evaluation of the monsters.
+.I Rog-O-Matic
+nows keeps a long term memory file (for each version of Rogue) in the
+score directory, and records the meanness of each monster it finds.
+This command prints out the letter, name, and strength of each monster.
+Strength is listed as three numbers: expected damage (scaled by 10) and
+maximum damage (unscaled) are shown in parentheses, and the mean number
+of arrows required to kill a monster is shown in square brackets.
+.TP
+.B CR
+.I Single step,
+a carriage return enables
+.I transparent
+mode, and causes
+.I Rog-O-Matic
+to single-step. The command sent is printed at the
+bottom right hand of the screen.
+.TP
+.B /
+.I Snapshot,
+a timestamp, the current screen, and the current inventory are appended
+to file
+.I rgm.snapshot
+in the current directory.
+.TP
+.B $
+.I Weaponrank,
+dumps 
+.I Rog-O-Matic's 
+current estimate of his weapons rankings.
+.TP
+.B %
+.I Armorrank,
+dumps 
+.I Rog-O-Matic's 
+current estimate of his armor rankings.
+.TP
+.B =
+.I Ringrank,
+dumps 
+.I Rog-O-Matic's 
+current estimate of his ring rankings.
+.TP
+.B -
+.I Status,
+prints out a status line indicating various things like whether 
+.I Rog-O-Matic
+is confused, has red hands, is wearing cursed armor or wielding a cursed
+weapon, and which monsters have been genocided.
+It also prints the number of turns elapsed in the game.
+.TP
+.B `
+.I Summary,
+a backquote prints a short summary of the game.
+.TP
+.B ~
+.I Version,
+prints the version of
+.I Rogue
+and
+.I Rog-O-Matic
+being used. It also prints the current goal score.
+.TP
+.B G
+.I Genotype,
+displays the settings of the genetically learned parameters of the
+genotype playing now.
+.TP
+.B R
+.I Replay position,
+allows you to skip around in a log file when replaying an old game.
+This key must be followed by either
+.B f, p, c, n,
+or
+.B l.
+These indicate you wish to see the
+.I first, previous, current, next,
+or
+.B last
+levels of the game.  The first time you enter the
+.B R
+command, there will be a pause of several seconds while the whole log
+file is digested.  After this initialization, there should be no delay
+when skipping around in the log file.  After you have skipped once, the
+program won't terminate at the end of the file until you enter the
+.B Q
+.I (quit)
+command.  This way you can replay the last level over (and over...).
+.IR
+.PP
+When the game ends, either by your death, when you quit, or when 
+.I Rog-O-Matic
+dies horribly of some bug, you will not get a list of the top-ten scorers.
+The scoring is based entirely upon useless criteria anyway.
+.I Rog-O-Matic
+does keep a list of its games. To see the best 
+.I Rog-O-Matic
+games, use "rogomatic -s" which dumps the current scores in reverse order.
+.PP
+For more detailed directions, read the source.
+.SH OPTIONS
+.TP
+.B -c
+Turns on cheat mode. See also the
+.B c
+command in transparent mode.
+.TP
+.B -e
+Turns on logging. See also the
+.B e
+command in transparent mode.
+.TP
+.B -f
+File command. The next argument is the file name of the 
+.I Rogue
+executable to use.
+.I Rog-O-Matic
+will play versions 3.6, 5.2, and 5.3;
+.I rogomatic -f /usr/games/rogue
+Would run 
+.I Rog-O-Matic
+against the standard system 
+.I Rogue
+game.  You can run Rog-O-Matic on modified rogues using this option,
+but be warned that the interface must be completely compatible with
+one of the standard versions of Rogue listed, and the version number
+printed must be either "3.6," "5.2," or "5.3."
+.TP
+.B -p
+Replay option. Typing 
+.I rogomatic -p
+will replay log file 
+.I roguelog.
+Or use
+.I rogomatic -p <file>
+to replay a specific file.
+.TP
+.B -r
+Restore option. Plays the game saved in the default 
+.I Rogue
+save file.
+.TP
+.B -s
+Scores. Lists the 
+.I Rog-O-Matic 
+scoreboard.
+.TP
+.B -t
+Terse mode. In terse mode,
+.I Rog-O-Matic 
+will only print a summary after each level explored.
+.TP
+.B -u
+User mode. Tells 
+.I Rog-O-Matic 
+to start up in transparent mode, so the user can type commands before
+.I Rog-O-Matic
+starts exploring level 1.
+.SH FILES
+There are two executable files: rogomatic and player.  Rogomatic
+is a small program which forks and execs the Rogue process and then execs the
+player process.  Thus you must have access to all of these files.  These are
+available as
+.PP
+	/usr/mlm/bin/rogomatic on the GP-Vax
+.br
+	/usr/mlm/bin/player on the GP-Vax
+.PP
+If you are moving these files to another machine, you must either edit the 
+rogomatic module to change the name of the player process, or run rogomatic 
+from a directory containing the player module.
+.PP
+The score file is kept in /usr/mlm/games/rlog/rgmscore<version>.
+If this file does not exist, it is created.
+.SH SEE ALSO
+rogue(6)
+.SH BUGS
+Occasionally 
+.I Rog-O-Matic
+will dead-lock waiting for input from 
+.I Rogue.
+When this happens, type an interrupt and enter the
+.I t
+command again. This usually wakes it up enough to re-start the game.
+In completely unusual cases, try interrupting and then entering the
+.I S
+command to save the game, and then re-start with "rogomatic -r". Sometimes
+you will have to use transparent mode to get it down to the next level
+before turning it loose again.
+.SH HISTORY
+.TP
+01-Feb-85  Michael Mauldin (mlm) at CMU
+Added genetic learning, UTexas mods, new titlepage, new version XIV.
+.TP
+01-Nov-83  Michael Mauldin (mlm) at CMU
+Modified to include long term memory, and to play Rogue 5.3.
+.TP
+31-Aug-83  Michael Mauldin (mlm) at CMU
+Modified the replay command to allow skipping around and replaying
+individual levels over and over.
+.TP
+16-Jun-83  Michael Mauldin (mlm) at CMU
+Added error logging, single-step mode, fixed several small bug fixes,
+modified title animation to display correct version number.
+.TP
+23-Apr-83  Hamey and Mauldin at CMU
+Version XII, replaced
+.I replay
+command with an option which causes input to come from a log file, and
+not from the Rogue process.  This removes the necessity of a standalone
+replay command.
+.TP
+16-Apr-83  Leonard Hamey (lgh) at CMU
+Added ability to infer unseen halls and use them in searchto without
+having trodden on them first.  Modified exploration algorithm.
+.TP
+07-Nov-82  Michael Mauldin (mlm) at CMU
+Added archery, homogenous ring handling, removed the keyact kluge.
+.TP
+27-Oct-82  Appel, Hamey, Jacobson, and Mauldin at CMU
+Added support for Rogue 5.2, and various other improvements and fixes.
+.TP
+30-Sep-82  Michael Mauldin (mlm) at CMU
+Added improved Invisible Stalker code, modified strength management,
+Amulet handling, improved cheating. Was a total winner on Level 26 with a
+score of 14,655.
+.TP
+18-May-82  Appel, Jacobson, and Mauldin at CMU
+Added running away, level searching, wand and staff usage.
+.TP
+26-Apr-82  Michael Mauldin (mlm) at CMU 
+Added replay ability.
+.TP
+22-Apr-82  Michael Mauldin (mlm) at CMU 
+Added cheating mode and enhanced magic handling abilities.
+.TP
+11-Apr-82  Michael Mauldin (mlm) at CMU 
+Added searching for secret doors.
+Modified breadth first search to avoid traps and prefer known safe squares.
+Added detection of potions of blindness.
+.TP
+21-Mar-82  Michael Mauldin (mlm) at CMU 
+Added termcap support.
+.TP
+12-Jan-82  Andrew Appel (awa) and Guy Jacobson (guy) at CMU
+Added breadth first search.
+.TP
+14-Oct-81  Andrew Appel (awa) and Guy Jacobson (guy) at CMU
+Created.

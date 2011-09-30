@@ -1,0 +1,1678 @@
+Messages from /usre0/mlm/mail.hg:
+
+  26?-+23 Feb 85 bellcore!wel (Wil... My Rogomatic XIV bug fixes (1514)
+  27?-+23 Feb 85 bellcore!wel (Wil... shar file of my XIV bug fixes (39348)
+
+----------
+
+---- Message 26 (1514 chars) is ----
+Received: from CMU-CS-PT.ARPA by CMU-CS-CAD.ARPA; 23 Feb 85 21:54:25 EST
+>From wel  Sat Feb 23 21:13:12 1985 remote from bellcore
+Received: by latour.UUCP (4.12/4.7)
+	id AA06977; Sat, 23 Feb 85 21:15:36 est
+Date: Sat, 23 Feb 85 21:15:36 est
+From: bellcore!wel (Will E. Leland)
+Message-Id: <8502240215.AA06977@latour.UUCP>
+To: cmucspt!mlm
+Subject: My Rogomatic XIV bug fixes
+
+	In order to get XIV running on a Pyramid instead of a VAX, I had
+to plow through a lot of lint warnings that 'make fluff' deletes. In the
+course of this labor, I've encountered a number of genuine bugs, and a
+fair number of tedious casts and coercions needed to make the code more
+portable. In my next mail, I'm sending a "shar"-style form of my larger
+Bugreport and the epic file mod.wel.sh that converts the Feb 19th version
+of Rogomatic into my less buggy version. I still haven't installed any of
+my tactical (etc) changes; this file merely fixes a number of petty bugs:
+calling willrust with no argument, omitting critical parenthesis around
+the bitwise & and | operators in places where C's precedence kills you,
+deliberately walking onto trapdoors when looking for secret doors, and such.
+There are more changes to come, but I hate to think of our versions diverging
+too far while I fiddle around.
+	I hope this stuff is useful; thanks for a really great entertainment
+(and a great attitude towards sharing the fun)!
+			Will Leland
+			{seismo,ucbvax,allegra,decvax,ihnp4}!bellcore!wel
+			201-829-4376 (office), 201-464-9364 (home)
+
+
+---- Message 27 (39348 chars) is ----
+Received: from CMU-CS-PT.ARPA by CMU-CS-CAD.ARPA; 23 Feb 85 21:54:36 EST
+>From wel  Sat Feb 23 21:35:04 1985 remote from bellcore
+Received: by latour.UUCP (4.12/4.7)
+	id AA07243; Sat, 23 Feb 85 21:37:18 est
+Date: Sat, 23 Feb 85 21:37:18 est
+From: bellcore!wel (Will E. Leland)
+Message-Id: <8502240237.AA07243@latour.UUCP>
+To: cmucspt!mlm
+Subject: shar file of my XIV bug fixes
+
+#!/bin/sh
+#
+# This is a shell archive.  Use the "unshar" command to unpack it, or
+# remove the mail header and pipe the body of the message through "sh".
+# 
+# 
+# This message contains two files from bellcore!wel:
+# 
+# 	Bugreport		A new Bugreport file
+# 	mod.wel.sh		a diff -e script (my mods, based on the Feb 19)
+# 
+# If you have already installed the two mods, then type 
+# 
+# 	% sh mod.wel.sh
+# 	% make
+# Changes:
+# mod.wel.sh	fixed various bugs; made code run on Pyramid as well as VAX
+# 
+# Share and Enjoy!
+# 
+# Will Leland					Bellcore Applied Research
+# (201) 829-4376				435 South Street
+# bellcore!wel					Morristown, NJ 07960
+#
+echo 'Start of Rgm XIV mods 02/23/85 - ed scripts:'
+echo 'x - Bugreport'
+sed 's/^X//' > Bugreport << '/'
+X/*
+X * Bugreport: Rog-O-Matic XIV (CMU) Sat Feb 23 20:37:56 1985 - wel
+X * Copyright (C) 1985 by A. Appel, G. Jacobson, L. Hamey, and M. Mauldin
+X */
+X
+X1. fails to wear any armor below level 7.
+X
+X	things.c:willrust()		changed itemis(PROTECTED)
+X	tactics.c:handlearmor()		dont worry about cursed armor
+X
+X
+X2. histplot and rplot are flaky (reported by AEB (play@turing)).
+X
+X	rplot				removed file name
+X	gene.c				fixed "Usage" message
+X	histplot.c			fixed bugs
+X	README				documented ancilliary functions
+X
+X3. utility.c uses "getpw (getuid (), name)", which according to
+X   Rick Adams @ Seismo is obsolete.  no fix made here.  Caveat Emptor!
+X
+X4. Armor handling again.  Fails to track current armor under Rogue 3.6
+X   and Rogue 5.2 (bug reported by Dennis Ritchie).
+X
+X	things.c:wear(),takeoff()	added usesynch=0 (ie: get new invent)
+X	tactics.c:handlearmor()		new strategy, includes 3rd best
+X
+X5. Failed to handle "cursed armor" message in Rogue 3.6 / 5.2.  Fixed.
+X
+X	mess.c:terpmes()		modified cursed mesage pattern
+X
+X6. Drops good, known items rather than quaffing/reading them
+X
+X	things.c:drop()			read/quaff some things
+X
+X7. Too often throws good armor away to keep mediocre scrolls.
+X
+X	worth.c:worth()			values armor more highly.
+X
+X8. Peter Wan reports problems with screen handling on terminals with
+X   no tabs.  Problem unknown.
+X
+X9. Fixed reply command to understand version messages at start of
+X   log files. Modifiekd to send version command when starting a
+X   log in the middle of the game.
+X
+X	io.c:getrogver()		look for version string in log
+X	io.c:toggleecho()		send version command
+X	mess.c:terpmes()		ignore version commands
+X
+X10. Fails to fight invisible stalkers properly
+X
+X	strategy.c:fightinvisible()	fixed old conversion bug
+X	search.c:followmap()		don't call fmove when beingstalked
+X
+X11. Doesn't recognize scrolls/wands of light in corridors
+X
+X	mess.c:terpmes()		added message about "corridor glows"
+X
+X12. Added debugging command about rustproof armor
+X
+X	arms.c:havearmor()		new flag 'rustproof'
+X	main.c:main()			new command ']'
+X
+X13. Fails to properly print message about genocided monsters.
+X
+X	io.c:statusline()		added missing %s to printf format
+X
+X14. Updated version message to take replaying into account
+X
+X	main.c:main()			new message
+X
+X15. Makefile does not include several dependencies on install.h
+X
+X	makefile			io, ltm, tactics, utility
+X
+X16. Sometimes gives extra message when doing an inventory.  Modified
+X    inventory to return true if it printed a message because an item
+X    listed has a remembered value substituted by the database routine.
+X
+X	pack.c:inventory()		now returns true is msg printed
+X	mess.c:terpmes()		uses value returned
+X
+X17. Reduced time groping when blind
+X
+X	strategy.c:stragize()		cut from 100 turns to 50
+X
+X18. Modified scroll handling, now reads scrolls even when in plunge
+X    mode.  Also fixed a bug with the 'aggravate monsters' check.
+X
+X	tactics.c:readscroll()		added missing s to "aggravate monster"
+X
+X19. If it finds a trap door when on the way back up between 26 and 18,
+X    it runs DOWN the trap door (stupid, stupid!).
+X
+X	tactics.c:plunge()		dont if have(amulet)
+X
+X20. Modified sanity check for identify scrolls.  Don't have to plan
+X    ahead in Rogue 5.3, so sanity check doesn't apply.
+X
+X	mess.c:readident()		change 'version <= RV53A' to '<'
+X
+X21. Remember that leather armor rusts in Rogue 3.6.
+X
+X	things.c:willrust()		check for Rogue 3.6
+X
+X22. If it is being stalked when on the way back up, it runs DOWN stairs.
+X	(reported by bellcore!wel)
+X
+X	strategy.c:fightinvisible()		first try going upstairs
+X
+X23. Modified makefile entry for 'fluff' to give more helpful messages;
+X    added explicit type casts to make lint happier and permit Rogomatic
+X    to run on a Pyramid as well as a VAX. (bellcore!wel)
+X
+X	makefile
+X	*.c
+X
+X24. Several uses of '&' and '|' ran afoul of precedence (reported by wel)
+X	
+X	explore.c: secretvalue
+X	search.c: followmap
+X	strategy.c: tomonster
+X
+X25. A few function calls were missing vital arguments (wel)
+X
+X	explore.c: secretinit called setpsd with no argument
+X	search.c: followmap called willrust with no argument
+X
+X26. Modified gene.c to allow non-5.3 gene files to be examined (wel)
+X
+X	install.h: defined default RV
+X	gene.c: main used default RV instead of RV53A
+X
+X27. Inappropriately walked into or avoided trapdoors. (wel)
+X
+X	explore.c: exprunvalue, expunpinvalue, expvalue, zigzagvalue,
+X		   secretvalue		better TRAPDOR checking
+X
+X28. If mintrials > 3, never gave up on any genotype (wel)
+X
+X	learn.c: untested	divide newtrials by mintrials
+/
+echo 'x - mod.wel.sh'
+sed 's/^X//' > mod.wel.sh << '/'
+Xecho Changing README
+Xed - README << '-*-END-*-'
+X42c
+Xvariables; you may also want to edit the "author" function in setup.c.
+X.
+X2c
+X* README: Rog-O-Matic XIV (CMU) Sat Feb 23 20:35:56 1985 - wel
+X.
+Xw
+Xq
+X-*-END-*-
+Xecho Changing makefile
+Xed - makefile << '-*-END-*-'
+X133,138c
+X	lint -bh *.c	| sed \
+X		-e '/arms\.c.*null effect/d' \
+X		-e '/but not used/d' \
+X		-e '/command\.c.*null effect/d' \
+X		-e '/connect.*llib-lc/d' \
+X		-e '/datesub\.c.*constant in conditional context/d' \
+X		-e '/datesub\.c.*yyfussy/d' \
+X		-e '/environ used/d' \
+X		-e '/explore\.c.*argument depth unused/d'\
+X		-e '/explore\.c.*argument cont unused/d'\
+X		-e '/explore\.c.*unused in function zigzagvalue/d'\
+X		-e '/ioctl.*2 used inconsistently/d' \
+X		-e '/learn\.c.*possible pointer alignment problem/d' \
+X		-e '/longjmp,.*1 used inconsistently/d' \
+X		-e '/mess\.c.*null effect/d' \
+X		-e '/multiply declared/d' \
+X		-e '/nametrap,.*1 used inconsistently/d' \
+X		-e '/pack\.c.*null effect/d' \
+X		-e '/printw/d' \
+X		-e '/rand/d' \
+X		-e '/redefinition hides earlier one/d' \
+X		-e '/rogue value declared inconsistently.*setup\.c/d' \
+X		-e '/send returns value which is always ignored/d' \
+X		-e '/send.*llib-lc/d' \
+X		-e '/stdscr used/d' \
+X		-e '/stty/d' \
+X		-e '/survival\.c.*constant in conditional context/d' \
+X		-e '/utility\.c.*possible pointer alignment problem/d' \
+X		-e '/yyinput/d' \
+X		-e '/yyoutput/d' \
+X		-e '/yyunput/d' \
+X		-e '/_pfast/d' \
+X		-e '/_echoit/d' \
+X		-e '/_rawmode/d' \
+X		-e '/_unctrl/d' \
+X		-e '/_flsbuf/d' \
+X		-e '/_tty/d' \
+X		> fluff
+X.
+X5,7c
+XBINDIR=     /usr/wel/bin
+XPUBDIR=     /usr/wel/src/rgm14
+XCCFLAGS=    -O
+X.
+X1c
+X# makefile: Rog-O-Matic XIV (CMU) Sat Feb 23 20:35:56 1985 - wel
+X.
+Xw
+Xq
+X-*-END-*-
+Xecho Changing arms.c
+Xed - arms.c << '-*-END-*-'
+X519c
+X    (void) dwait (D_BATTLE, "Havemissile fails");
+X.
+X517c
+X    (void) dwait (D_BATTLE, "Havemissile returns (%s", itemstr (obj));
+X.
+X2c
+X * arms.c: Rog-O-Matic XIV (CMU) Sat Feb 23 20:35:56 1985 - wel
+X.
+Xw
+Xq
+X-*-END-*-
+Xecho Changing command.c
+Xed - command.c << '-*-END-*-'
+X214c
+X		(void) strcpy (lastname, inven[lastwand].str);
+X.
+X181c
+X		(void) strcpy (lastname, inven[lastobj].str);
+X.
+X174c
+X		(void) strcpy (lastname, inven[lastobj].str);
+X.
+X156,157c
+X{ int newweapon, obj;
+X.
+X85c
+X    { (void) strcpy (lastcom, cmd);
+X.
+X81c
+X        (void) dwait (D_FATAL, "command: cannot synchronize inventory, invcount %d.",
+X.
+X57c
+X  (void) sprintf (cmd, f, a1, a2, a3, a4);
+X.
+X48a
+X/*VARARGS2*/
+X.
+X2c
+X * command.c: Rog-O-Matic XIV (CMU) Sat Feb 23 20:35:56 1985 - wel
+X.
+Xw
+Xq
+X-*-END-*-
+Xecho Changing database.c
+Xed - database.c << '-*-END-*-'
+X79c
+X      (void) strcpy (dbase[i].roguenam, name);
+X.
+X76c
+X      (void) dwait (D_ERROR, "Inconsistent inference '%s', '%s'", 
+X.
+X71,72c
+X  { (void) strcpy (dbase[datalen].fakename, oldname);
+X    (void) strcpy (dbase[datalen++].roguenam, name);
+X.
+X52,53c
+X  { (void) strcpy (dbase[datalen].fakename, oldname);
+X    (void) strcpy (dbase[datalen++].roguenam, "");
+X.
+X2c
+X * database.c: Rog-O-Matic XIV (CMU) Sat Feb 23 20:35:56 1985 - wel
+X.
+Xw
+Xq
+X-*-END-*-
+Xecho Changing debug.c
+Xed - debug.c << '-*-END-*-'
+X212c
+X  { (void) sscanf (buf, "%d,%d", r, c);
+X.
+X185,195c
+X  if (debug(D_FATAL))     (void) strcat (debugstr, "fatal:");
+X  if (debug(D_ERROR))     (void) strcat (debugstr, "error:");
+X  if (debug(D_WARNING))   (void) strcat (debugstr, "warn:");
+X  if (debug(D_INFORM))    (void) strcat (debugstr, "info:");
+X  if (debug(D_SEARCH))    (void) strcat (debugstr, "search:");
+X  if (debug(D_BATTLE))    (void) strcat (debugstr, "battle:");
+X  if (debug(D_MESSAGE))   (void) strcat (debugstr, "msg:");
+X  if (debug(D_PACK))      (void) strcat (debugstr, "pack:");
+X  if (debug(D_CONTROL))   (void) strcat (debugstr, "ctrl:");
+X  if (debug(D_SCREEN))    (void) strcat (debugstr, "screen:");
+X  if (debug(D_MONSTER))   (void) strcat (debugstr, "monster:");
+X.
+X183c
+X  (void) strcpy (debugstr, "Debugging :");
+X.
+X152,153c
+X      (void) sprintf (s, "%s%5d", s, timespent[i].activity[j]);
+X    (void) sprintf (s, "%s%6d%c",
+X.
+X150c
+X  { (void) sprintf (s, "%slevel %2d:     ", s, i);
+X.
+X145c
+X  (void) sprintf (s, "Time Analysis: %s%c%c",
+X.
+X86c
+X      case ')': (void) markcycles (DOPRINT); at (row, col); break;
+X.
+X74c
+X      case 'i': at (1,0); dumpinv ((FILE *) NULL); at (row, col); break;
+X.
+X55c
+X    longjmp (commandtop, 1);
+X.
+X46c
+X      (void) fclose (errfil);
+X.
+X37c
+X    (void) sprintf (errfn, "%s/error%s", RGMDIR, versionstr);
+X.
+X31c
+X  (void) sprintf (msg, f, a1, a2, a3, a4, a5, a6, a7, a8);
+X.
+X23a
+X/*VARARGS2*/
+X.
+X2c
+X * debug.c: Rog-O-Matic XIV (CMU) Sat Feb 23 20:35:56 1985 - wel
+X.
+Xw
+Xq
+X-*-END-*-
+Xecho Changing explore.c
+Xed - explore.c << '-*-END-*-'
+X1149c
+X  (void) dwait (D_SEARCH, "movetorest fails.");
+X.
+X1143c
+X  { (void) dwait (D_SEARCH, "movetorest wins.");
+X.
+X1139c
+X  { (void) dwait (D_SEARCH, "movetorest: already on square"); return (0); }
+X.
+X1044c
+X  mlist[m].q = AWAKE; (void) dwait (D_BATTLE, "archmonster, waking him up"); 
+X.
+X1037c
+X  { (void) dwait (D_BATTLE, "archmonster, made a move"); return (1); }
+X.
+X1030c
+X  { (void) dwait (D_BATTLE, "archmonster, monster not asleep"); return (0); }
+X.
+X1024,1025c
+X  if (havemult (missile, "", turns) == NONE) 
+X  { (void) dwait (D_BATTLE, "archmonster, fewer than %d missiles", turns); 
+X.
+X1019c
+X  (void) dwait (D_CONTROL | D_BATTLE, "archmonster: m=%d, turns=%d", m, turns);
+X.
+X923c
+X  (void) dwait (D_SEARCH, "exploreroom failed.");
+X.
+X908c
+X  (void) dwait (D_SEARCH, "findroom failed.");
+X.
+X839c
+X  (void) dwait (D_SEARCH, "Pinavoid: avoiding the &s");
+X.
+X783c
+X  (void) dwait (D_SEARCH, "Avoidmonsters: avoiding the $s");
+X.
+X718c
+X        onrc (DOOR|BEEN, r, c) == (DOOR|BEEN) && 
+X.
+X689c
+X      onrc (TRAPDOR, r, c) ? INFINITY :	/* WEL */
+X.
+X674,675c
+X{ (void) expinit ();
+X  if (setpsd (NOPRINT))
+X.
+X623,624c
+X      onrc (TRAPDOR, r, c) ? 0 :
+X      onrc (TELTRAP, r, c) ? 0 :
+X.
+X612a
+X * Don't avoid Trapdoors and Teleport Traps 		WEL 12/19/84
+X.
+X598c
+X  { mvaddch (r, c, 'o'); (void) dwait (D_SCREEN, "Value %d", v); }
+X.
+X521c
+X      onrc (TRAPDOR, r, c) ? INFINITY : /* don't try to explore a trapdoor WEL*/
+X.
+X492c
+X{ (void) expinit ();
+X.
+X352,353c
+X  else if (onrc (MONSTER, r, c)) *val = 0;
+X  else if (onrc (TRAP, r, c))	/* TRAP useless MLM; except TEL & TRAPDOR WEL */
+X  {if (onrc(TELTRAP|TRAPDOR, r, c)) *avd = 0; else *val = 0; }
+X.
+X335,336c
+X{ (void) dwait (D_CONTROL | D_SEARCH, "expunpininit called.");
+X  (void) expinit();
+X.
+X320,321c
+X  else if (onrc (MONSTER, r, c)) *val = 0;
+X  else if (onrc (TRAP, r, c))	/* TRAP useless MLM; except TEL & TRAPDOR WEL */
+X  {if (onrc(TELTRAP|TRAPDOR, r, c)) *avd = 0; else *val = 0; }
+X.
+X303,304c
+X{ (void) dwait (D_CONTROL | D_SEARCH, "expruninit called.");
+X  (void) expinit();
+X.
+X2c
+X * explore.c: Rog-O-Matic XIV (CMU) Sat Feb 23 20:35:56 1985 - wel
+X.
+Xw
+Xq
+X-*-END-*-
+Xecho Changing findscore.c
+Xed - findscore.c << '-*-END-*-'
+X49c
+X  (void) unlink (tmpfname); 
+X.
+X21,22c
+X  (void) sprintf (cmd, "%s -s >%s", rogue, mktemp (tmpfname)); 
+X  (void) system (cmd); 
+X.
+X11a
+Xextern char *mktemp();
+X.
+X2c
+X * findscore.c: Rog-O-Matic XIV (CMU) Sat Feb 23 20:35:56 1985 - wel
+X.
+Xw
+Xq
+X-*-END-*-
+Xecho Changing gene.c
+Xed - gene.c << '-*-END-*-'
+X48c
+X      (void) openlog (genelog);		/* Open the gene log file */
+X.
+X40,42c
+X  (void) sprintf (genelock, "%s/GeneLock%d", RGMDIR, version);
+X  (void) sprintf (genelog, "%s/GeneLog%d", RGMDIR, version);
+X  (void) sprintf (genepool, "%s/GenePool%d", RGMDIR, version);
+X.
+X26c
+X      { case 'i':	init++;
+X.
+X20c
+X{ int m=10, init=0, seed=0, version=DEFRV, full=0;
+X.
+X11a
+Xextern FILE *openlog ();
+X.
+X2c
+X * gene.c: Rog-O-Matic XIV (CMU) Sat Feb 23 20:35:56 1985 - wel
+X.
+Xw
+Xq
+X-*-END-*-
+Xecho Changing globals.h
+Xed - globals.h << '-*-END-*-'
+X33c
+Xextern char getlogtoken(), *getname(), *itemstr(), *strcat(), *strcpy();
+X.
+X2c
+X * globals.h: Rog-O-Matic XIV (CMU) Sat Feb 23 20:35:56 1985 - wel
+X.
+Xw
+Xq
+X-*-END-*-
+Xecho Changing histplot.c
+Xed - histplot.c << '-*-END-*-'
+X164c
+X    (void) sscanf (line, "%s %d, %d %10s%d%c%17s",
+X.
+X109c
+X        (void) sprintf (plot, "|         |         |         |         |         |");
+X.
+X107c
+X        (void) sprintf (plot, "|    +    |    +    |    +    |    +    |    +    |");
+X.
+X105c
+X        (void) sprintf (plot, "|----+----|----+----|----+----|----+----|----+----|");
+X.
+X101c
+X        (void) sprintf (plot, "|         |         |         |");
+X.
+X99c
+X        (void) sprintf (plot, "|    +    |    +    |    +    |");
+X.
+X97c
+X        (void) sprintf (plot, "|----+----|----+----|----+----|");
+X.
+X2c
+X * histplot.c: Rog-O-Matic XIV (CMU) Sat Feb 23 20:35:56 1985 - wel
+X.
+Xw
+Xq
+X-*-END-*-
+Xecho Changing install.h
+Xed - install.h << '-*-END-*-'
+X39c
+X * prevent simultaneous accesses. This variable must be defined, but will
+X.
+X35c
+X# define DEFVER		"5.3"
+X# define DEFRV		RV53A
+X.
+X32c
+X * defined, and can be either "5.2", "3.6", or "5.3". DEFRV is must be
+X * the corresponding internal version code defined in types.h.
+X.
+X13a
+X*/
+X.
+X12a
+X/*
+X.
+X2c
+X * install.h: Rog-O-Matic XIV (CMU) Sat Feb 23 20:35:56 1985 - wel
+X.
+Xw
+Xq
+X-*-END-*-
+Xecho Changing io.c
+Xed - io.c << '-*-END-*-'
+X1141c
+X  (void) sprintf (s, "%s%d food%s, %d missile%s, %d turn%s, (%d,%d %d,%d) bonus",
+X.
+X1139c
+X  if (*genocided) (void) sprintf (s, "%sgenocided '%s', ", s, genocided);
+X.
+X1124,1137c
+X  if (aggravated)		(void) strcat (s, "aggravated, ");
+X  if (beingheld)		(void) strcat (s, "being held, ");
+X  if (blinded)			(void) strcat (s, "blind, ");
+X  if (confused)			(void) strcat (s, "confused, ");
+X  if (cosmic)			(void) strcat (s, "cosmic, ");
+X  if (cursedarmor)		(void) strcat (s, "cursed armor, ");
+X  if (cursedweapon)		(void) strcat (s, "cursed weapon, ");
+X  if (doublehasted)		(void) strcat (s, "perm hasted, ");
+X  if (droppedscare)		(void) strcat (s, "dropped scare, ");
+X  if (floating)			(void) strcat (s, "floating, ");
+X  if (hasted)			(void) strcat (s, "hasted, ");
+X  if (protected)		(void) strcat (s, "protected, ");
+X  if (redhands)			(void) strcat (s, "red hands, ");
+X  if (Level == didreadmap)	(void) strcat (s, "mapped, ");
+X.
+X1122c
+X  (void) sprintf (s, "Status: ");
+X.
+X1086c
+X    (void) fclose (snapshot);
+X.
+X1022c
+X	    (void) GETLOGCHAR;		/* Ignore '}' */
+X.
+X897c
+X    (void) fclose (fecho);
+X.
+X845c
+X  if (retc = ioctl (READ, FIONREAD, (char *) &n))
+X.
+X816c
+X    { (void) sprintf (versionstr, DEFVER); }
+X.
+X720c
+X/*VARARGS1*/
+X.
+X708c
+X  { (void) sprintf (buf, s, a1, a2, a3, a4, a5, a6, a7, a8);
+X.
+X701a
+X/*VARARGS1*/
+X.
+X675c
+X  (void) wait ((union wait *) 0);
+X.
+X641c
+X  (void) sprintf (sumline, "%s %2d %2d/%-6d  %d", 
+X.
+X639c
+X    (void) sprintf (sumline, "%s  %2d ", sumline, Str/100);
+X.
+X637c
+X    (void) sprintf (sumline, "%s%2d.%2d", sumline, Str/100, Str%100);
+X.
+X632c
+X  (void) sprintf (sumline, "%3s %2d, %4d %-8.8s %7d%s%-17.17s %3d %3d ",
+X.
+X615c
+X  time_t   clock;
+X.
+X609a
+X#include <sys/wait.h>
+X
+X.
+X589c
+X  (void) sscanf (&screen[GOLDROW][TOMBCOL], "%18d", &Gold);
+X.
+X556c
+X    (void) fflush (fecho);
+X.
+X461c
+X  (void) sprintf (s, f, a1, a2, a3, a4);
+X.
+X454a
+X/*VARARGS1*/
+X.
+X426c
+X  (void) sprintf (cmd, f, a1, a2, a3, a4);
+X.
+X419a
+X/*VARARGS1*/
+X.
+X368c
+X        (void) fflush (realstdout);
+X.
+X364c
+X        (void) fflush (realstdout);
+X.
+X361,362c
+X      { (void) sprintf (modeline, " %s (%%b)", screen[23]);
+X        if (strlen (modeline) > 72) (void) sprintf (modeline, " %s", screen[23]);
+X.
+X352c
+X    (void) strcpy (parmstr, modeline);    
+X.
+X349c
+X    (void) sprintf (modeline, "Rgm %d: Id%d L%d %d %d(%d) s%d a%d e%d    ",
+X.
+X318c
+X  { (void) sscanf (screen[23],
+X.
+X311c
+X  { (void) sscanf (screen[23],
+X.
+X306c
+X    (void) sscanf (sstr, "%d/%d", &Str, &Str18);
+X.
+X303c
+X  { (void) sscanf (screen[23],
+X.
+X269c
+X      (void) dwait (D_INFORM, "new door at %d, %d", r, c);
+X.
+X259c
+X  { (void) dwait (D_CONTROL | D_SEARCH, "wasmapped: %d   didreadmap: %d",
+X.
+X208c
+X        	
+X.
+X120c
+X        /* (void) sprintf (&screen[0][col - 7], "--More--"); */ 
+X.
+X107c
+X        if (++morecount > 100) (void) dwait (D_FATAL, "Caught in --More-- loop.");
+X.
+X104c
+X	{ toggleecho (); (void) dwait (D_WARNING, "Started logging --More-- loop."); }
+X.
+X24a
+Xextern time_t time ();
+X
+X.
+X19a
+X# include "install.h"
+X.
+X11,12d
+X9a
+X# include <sys/types.h>
+X.
+X2c
+X * io.c: Rog-O-Matic XIV (CMU) Sat Feb 23 20:35:56 1985 - wel
+X.
+Xw
+Xq
+X-*-END-*-
+Xecho Changing learn.c
+Xed - learn.c << '-*-END-*-'
+X626c
+X    if (TRIALS (genes[g]) < newtrials / (4 * mintrials * length) + mintrials)
+X.
+X547c
+X    { genes[g] = (genotype *) malloc ( (unsigned) sizeof (**genes));
+X.
+X312c
+X  (void) fclose (gfil);
+X.
+X267c
+X  (void) sscanf (buf, "%d %d %d %d", &gene->id, &gene->creation,
+X.
+X252c
+X  (void) fclose (gfil);
+X.
+X245c
+X    { genes[g] = (genotype *) malloc ( (unsigned) sizeof (**genes));
+X.
+X234,235c
+X  if (fgets (b, BUFSIZ, gfil) == NULL) return (0);
+X  (void) sscanf (b, "%d %d %d %d %d %d",
+X.
+X214c
+X * Returns true if the file was read, and 0 if there was no fail.  Exits
+X.
+X149c
+X{ if (glog) (void) fclose (glog);
+X.
+X59c
+X  qsort ((char *) genes, length, sizeof (*genes), compgene);
+X.
+X43c
+X{ inittime = time ((time_t *) NULL);
+X.
+X32c
+Xstatic int mindiff = 10, pmutate = 8, pshift = 2, mintrials = 5;
+X.
+X26c
+Xstatic time_t inittime=0;
+Xstatic int trialno=0, lastid=0;
+X.
+X23a
+Xextern time_t time();
+X.
+X21a
+Xextern char *ctime(), *malloc();
+X.
+X7a
+X# include <sys/types.h>
+X.
+X2c
+X * learn.c: Rog-O-Matic XIV (CMU) Sat Feb 23 20:35:56 1985 - wel
+X.
+Xw
+Xq
+X-*-END-*-
+Xecho Changing ltm.c
+Xed - ltm.c << '-*-END-*-'
+X189c
+X    (void) fclose (ltmfil);
+X.
+X181c
+X      (void) sscanf (buf, "Count %d, sum %d, start %d, saved %d",
+X.
+X175c
+X    (void) dwait (D_WARNING | D_SAY,
+X.
+X151c
+X      ltm.inittime = time ((time_t *) NULL);
+X.
+X148c
+X    { (void) dwait (D_CONTROL | D_SAY,
+X.
+X133,134c
+X  (void) sprintf (ltmnam, "%s/ltm%d", RGMDIR, version);
+X  (void) dwait (D_CONTROL, "Restoreltm called, reading file '%s'", ltmnam);
+X.
+X118c
+X      (void) fclose (ltmfil);
+X.
+X99c
+X    { (void) dwait (D_WARNING, "Can't write long term memory file '%s'...", ltmnam); }
+X.
+X91c
+X  (void) dwait (D_CONTROL, "Saveltm called, writing file '%s'", ltmnam);
+X.
+X57c
+X  (void) strcpy (monhist[nextmon].m_name, monster);	/* Copy in the name */
+X.
+X55c
+X    (void) dwait (D_FATAL, "Overflowed monster array");
+X.
+X25c
+X  (void) dwait (D_CONTROL, "mapcharacter called: '%c' ==> '%s'", ch, str);  
+X.
+X16a
+Xextern time_t time ();
+X.
+X10a
+X# include <sys/types.h>
+X.
+X2c
+X * ltm.c: Rog-O-Matic XIV (CMU) Sat Feb 23 20:35:56 1985 - wel
+X.
+Xw
+Xq
+X-*-END-*-
+Xecho Changing main.c
+Xed - main.c << '-*-END-*-'
+X777c
+X    { (void) openlog (genelog);		/* Open the gene log file */
+X.
+X734,736c
+X{ (void) sprintf (genelog, "%s/GeneLog%d", RGMDIR, version);
+X  (void) sprintf (genepool, "%s/GenePool%d", RGMDIR, version);
+X  (void) sprintf (genelock, "%s/GeneLock%d", RGMDIR, version);
+X.
+X725c
+X  longjmp (commandtop, 1);      /* Back to command Process */
+X.
+X718c
+X  if (logging) (void) fflush (fecho);  /* Print out everything */
+X.
+X700c
+X    { (void) unlink (ROGUELOG);
+X.
+X693c
+X    (void) sprintf (lognam, "%0.4s.%d.%d", ourkiller, MaxLevel, ourscore);
+X.
+X655c
+X        case ROGQUIT: (void) dwait (D_ERROR, "Strategize failed, gave up.");
+X.
+X640c
+X        case 'F': (void) dwait (D_FATAL, "Testing the FATAL trap..."); break;
+X.
+X638c
+X        case 'E': (void) dwait (D_ERROR, "Testing the ERROR trap..."); break;
+X.
+X624c
+X        case '^': clear (); (void) havebow (1, DOPRINT); pauserogue (); break;
+X.
+X622c
+X        case '$': clear (); (void) haveweapon (1, DOPRINT); pauserogue (); break;
+X.
+X620c
+X        case '=': clear (); (void) havering (1, DOPRINT); pauserogue (); break;
+X.
+X617c
+X        case ']': clear (); (void) havearmor (1, DOPRINT, RUSTPROOF);
+X.
+X615c
+X        case '%': clear (); (void) havearmor (1, DOPRINT, ANY); pauserogue (); break;
+X.
+X594c
+X        case 'i': clear (); dumpinv ((FILE *) NULL); pauserogue (); break;
+X.
+X588c
+X                  timehistory ((FILE *) NULL, '\n');
+X.
+X583c
+X                  summary ((FILE *) NULL, '\n');
+X.
+X545c
+X        case '+': (void) setpsd (DOPRINT); at (row, col); break;
+X.
+X543c
+X        case ')': (void) markcycles (DOPRINT); at (row, col); break;
+X.
+X506c
+X	           { printsnap (realstdout); (void) fflush (realstdout); }
+X.
+X462c
+X    (void) signal (SIGINT, onintr);
+X.
+X460c
+X  (void) setjmp (commandtop);              /* save stack position */
+X.
+X415c
+X  { fprintf (realstdout, "%s\n", msg); (void) fflush (realstdout); }
+X.
+X413c
+X  { fprintf (realstdout, "%s  (%%b)", msg); (void) fflush (realstdout); }
+X.
+X409c
+X    (void) sprintf (msg, " %s: version %s, genotype %d, quit at %d.",
+X.
+X406c
+X    (void) sprintf (msg, " Replaying log file %s, version %s.", 
+X.
+X388c
+X    (void) freopen ("/dev/null", "w", stdout);
+X.
+X373,374c
+X  if (argc > 4)	(void) strcpy (roguename, argv[4]);
+X  else		(void) sprintf (roguename, "Rog-O-Matic %s", RGMVER);
+X.
+X368c
+X  if (argc > 3) (void) sscanf (argv[3], "%d,%d,%d,%d,%d,%d,%d,%d", 
+X.
+X361c
+X    setbuf (trogue, (char *) NULL);
+X.
+X355c
+X    (void) strcpy (logfilename, argv[4]);
+X.
+X336,340c
+X  (void) sprintf (genocided, "");
+X  (void) sprintf (lastcmd, "i");
+X  (void) sprintf (ourkiller, "unknown");
+X  (void) sprintf (sumline, "");
+X  (void) sprintf (versionstr, "");
+X.
+X328c
+X{ char  ch, *s, *getenv(), *statusline(), msg[128], *strcpy();
+X.
+X236c
+Xchar getroguetoken (), *getname ();
+XFILE *openlog ();
+X.
+X2c
+X * main.c: Rog-O-Matic XIV (CMU) Sat Feb 23 20:35:56 1985 - wel
+X.
+Xw
+Xq
+X-*-END-*-
+Xecho Changing mess.c
+Xed - mess.c << '-*-END-*-'
+X844c
+X    (void) sprintf (s, "%sGold %d total, %d pots, %d average.%c",  s,
+X.
+X839c
+X  (void) sprintf (s, "%sHit %d out of %d times, was hit %d out of %d times.%c", s,
+X.
+X837c
+X  (void) sprintf (s, "%s%cTotal: %d%c%c", s, sep, totalkilled, sep, sep);
+X.
+X833c
+X    { (void) sprintf (s, "%s\t%d %s%s%c", s, monkilled[m],  monname (m+'A'-1),
+X.
+X829c
+X  (void) sprintf (s, "Monsters killed:%c%c", sep, sep);
+X.
+X719c
+X  (void) dwait (D_MONSTER, "was missed by a '%s'", monster);
+X.
+X693c
+X  (void) dwait (D_MONSTER, "was hit by a '%s'", monster);
+X.
+X653c
+X    (void) dwait (D_BATTLE | D_MONSTER, "%d out of %d missiles hit the %s", 
+X.
+X641c
+X  (void) dwait (D_BATTLE | D_MONSTER, "Killed '%s'", monster);
+X.
+X620c
+X      { (void) strcpy (inven[i].str, roguename);
+X.
+X572c
+X  { (void) dwait (D_ERROR, "Out of monsters to genocide!");
+X.
+X568c
+X    (void) sprintf (genocided, "%s%c", genocided, monc);
+X.
+X527c
+X    else (void) dwait (D_FATAL, "Unknown identify scroll '%s'", name);
+X.
+X489c
+X  { (void) dwait (D_FATAL, "Readident: nextid %d, afterid %d, invcount %d.",
+X.
+X433,434c
+X  if (morecount > 50)	(void) dwait (D_WARNING, "More loop msg '%s'", mess);
+X  else if (unknown)	(void) dwait (D_WARNING, "Unknown message '%s'", mess);
+X.
+X409c
+X      else if (MATCH("you faint")) {echoit=0; if (version<RV36B) (void) eat();}
+X.
+X333c
+X      else if (MATCH("you are weak from hunger")) {echoit=0; (void) eat();}
+X.
+X282c
+X        if (justreadid < -50) (void) dwait (D_FATAL, "Caught in invalid item loop"); }
+X.
+X245c
+X        { (void) dwait (D_INFORM, "Range check failed..."); usesynch = 0; }
+X.
+X183c
+X      else if (MATCH("i see no way*")) {unset(STAIRS); findstairs(NONE, NONE);}
+X.
+X94c
+X  { echoit = identifying; identifying = justreadid = 0; (void) inventory(mess,mend); }
+X.
+X2c
+X * mess.c: Rog-O-Matic XIV (CMU) Sat Feb 23 20:35:56 1985 - wel
+X.
+Xw
+Xq
+X-*-END-*-
+Xecho Changing monsters.c
+Xed - monsters.c << '-*-END-*-'
+X146c
+X    { (void) dwait (D_MONSTER, "Waking up %s at %d,%d",
+X.
+X119c
+X    { (void) dwait (D_MONSTER, "Holding %s at %d,%d",
+X.
+X100c
+X    { (void) dwait (D_MONSTER, "Found a sleeping %s at %d,%d",
+X.
+X43c
+X    if (++mlistlen >= MAXMONST) (void) dwait (D_FATAL, "Too many monsters");
+X.
+X2c
+X * monsters.c: Rog-O-Matic XIV (CMU) Sat Feb 23 20:35:56 1985 - wel
+X.
+Xw
+Xq
+X-*-END-*-
+Xecho Changing pack.c
+Xed - pack.c << '-*-END-*-'
+X423c
+X    (void) dwait (D_ERROR, "terpmess: null inven[%d].str, invcount %d.",
+X.
+X421c
+X    (void) strcpy (inven[ipos].str, objname);
+X.
+X358c
+X    { (void) strcpy (objname, dbname);
+X.
+X345c
+X  (void) dwait (D_PACK, "inv: %s '%s', hit %d, dam %d, chg %d, knw %d",
+X.
+X238c
+X  (void) dwait (D_PACK, "inventory: message %s", mess);
+X.
+X43c
+X    (void) sprintf (item, "%s %s%s%s%s%s%s%s%s%s.",	  /* DR UTexas */
+X.
+X41c
+X      (void) sprintf (item, "%s [%d]", item, inven[i].charges);
+X.
+X38c
+X      (void) sprintf (item, "%s (%d,%d)", item, inven[i].phit, inven[i].pdam);
+X.
+X36c
+X      (void) sprintf (item, "%s (%d)", item, inven[i].phit);
+X.
+X32c
+X  { (void) sprintf (item, "%c) %4d %d*%s:", LETTER(i), worth(i),
+X.
+X30c
+X  { (void) sprintf (item, "%c)      nothing", LETTER(i)); }
+X.
+X28c
+X  { (void) sprintf (item, "%d out of bounds", i); }
+X.
+X2c
+X * pack.c: Rog-O-Matic XIV (CMU) Sat Feb 23 20:35:56 1985 - wel
+X.
+Xw
+Xq
+X-*-END-*-
+Xecho Changing rand.c
+Xed - rand.c << '-*-END-*-'
+X52c
+X  if (seed == 0) seed = time((time_t *) 0);
+X.
+X50a
+X  extern time_t time ();
+X.
+X18a
+X# include <sys/types.h>
+X
+X.
+X2c
+X * rand.c: Rog-O-Matic XIV (CMU) Sat Feb 23 20:35:56 1985 - wel
+X.
+Xw
+Xq
+X-*-END-*-
+Xecho Changing replay.c
+Xed - replay.c << '-*-END-*-'
+X161c
+X  (void) fscanf (f, "%d/%d", &lev->explev, &lev->exp);
+X.
+X158c
+X  (void) fscanf (f, "%d", &lev->ac);
+X.
+X155c
+X  (void) fscanf (f, "%d(%d)", &lev->str, &lev->strmax);
+X.
+X152c
+X  (void) fscanf (f, "%d(%d)", &lev->hp, &lev->hpmax);
+X.
+X149c
+X  (void) fscanf (f, "%d", &lev->gold);
+X.
+X146c
+X  (void) fscanf (f, "%d", &lev->level);
+X.
+X116c
+X  { (void) fseek (f, (long) -strlen (POSITAT), 1);
+X.
+X80c
+X    default:  (void) fseek (logfile, 0L, 0);
+X.
+X78c
+X    case 'l': (void) fseek (logfile, levpos[numlev-1].pos, 0);
+X.
+X74,76c
+X    case 'c': (void) fseek (logfile, levpos[curlev].pos, 0); break;
+X    case 'n': if (curlev < numlev-1) (void) fseek (logfile, levpos[curlev+1].pos, 0);
+X              else            (void) fseek (logfile, levpos[curlev].pos, 0);
+X.
+X70,72c
+X  { case 'f': (void) fseek (logfile, levpos[0].pos, 0); break;
+X    case 'p': if (curlev > 0) (void) fseek (logfile, levpos[curlev-1].pos, 0);
+X              else            (void) fseek (logfile, levpos[0].pos, 0);
+X.
+X58c
+X      (void) fseek (logfile, curpos, 0);
+X.
+X2c
+X * replay.c: Rog-O-Matic XIV (CMU) Sat Feb 23 20:35:56 1985 - wel
+X.
+Xw
+Xq
+X-*-END-*-
+Xecho Changing rgmplot.c
+Xed - rgmplot.c << '-*-END-*-'
+X148c
+X  { (void) sscanf (line, "%d %d, %d %10s%d%c%17s",
+X.
+X143c
+Xrgetscore (mm, dd, yy, player, score, cheated)
+X.
+X136c
+X    (void) strcpy (s, "-1 -1, -1 string -1 ");
+X.
+X90c
+X    { if ((h = SCALE(score)) >= WIDTH) (void) sprintf (plot, "%s %d", plot, score);
+X.
+X85c
+X      (void) strcpy (plot, "|                                                 |");
+X.
+X58c
+X  while (rgetscore (&mm, &dd, &yy, player, &score, &cheated) != EOF)
+X.
+X55c
+X  (void) strcpy (plot, "|                                                 |");
+X.
+X27c
+X  char player[100], plot[128], cheated, *strcpy();
+X.
+X2c
+X * rgmplot.c: Rog-O-Matic XIV (CMU) Sat Feb 23 20:35:56 1985 - wel
+X.
+Xw
+Xq
+X-*-END-*-
+Xecho Changing rooms.c
+Xed - rooms.c << '-*-END-*-'
+X842c
+X  (void) dwait (D_INFORM, "Inferring hall (%d,%d) to (%d,%d)", r1, c1, r2, c2);
+X.
+X834c
+X  (void) dwait (D_SEARCH | D_CONTROL, "Hall search done.");
+X.
+X772c
+X  (void) dwait (D_SEARCH, "Room direction %d", dir);
+X.
+X662c
+X  (void) dwait (D_CONTROL, "Map read: inferring rooms.");
+X.
+X433c
+X    (void) dwait (D_INFORM, "Inferring %s at %d,%d.", terrain, atrow, atcol);
+X.
+X231c
+X  if ((obj = havewand ("light")) != NONE && point (obj, 0))
+X.
+X228c
+X  if ((obj = havenamed (scroll, "light")) != NONE && reads (obj))
+X.
+X132c
+Xlong ttype; int standingonit;
+X.
+X2c
+X * rooms.c: Rog-O-Matic XIV (CMU) Sat Feb 23 20:35:56 1985 - wel
+X.
+Xw
+Xq
+X-*-END-*-
+Xecho Changing scorefile.c
+Xed - scorefile.c << '-*-END-*-'
+X163c
+X  (void) fclose (scoref);
+X.
+X143c
+X    (void) umask (oldmask);
+X.
+X136,138c
+X    { (void) sprintf (cmd, "sort +4nr -o %s %s", scrfil, delfil);
+X      (void) system (cmd);
+X      (void) unlink (delfil);
+X.
+X129,130c
+X        (void) unlink (delfil); (void) unlink (newfil);
+X	(void) unlink (scrfil); (void) link (allfil, scrfil); (void) unlink (allfil);
+X.
+X123c
+X        (void) unlink (newfil); (void) unlink (allfil);
+X.
+X120c
+X      (void) system (cmd);
+X.
+X117,118c
+X    { (void) fclose (scoref);
+X      (void) sprintf (cmd, "sort +4nr -o %s %s; sort -m +4nr -o %s %s %s", 
+X.
+X107c
+X  { (void) fclose (deltaf);
+X.
+X88,92c
+X  (void) sprintf (lokfil, "%s %s", LOCKFILE, version);
+X  (void) sprintf (scrfil, "%s/rgmscore%s", RGMDIR, version);
+X  (void) sprintf (delfil, "%s/rgmdelta%s", RGMDIR, version);
+X  (void) sprintf (newfil, "%s/NewScore%s", RGMDIR, version);
+X  (void) sprintf (allfil, "%s/AllScore%s", RGMDIR, version);
+X.
+X67c
+X    (void) fclose (newlog);
+X.
+X40,41c
+X  (void) sprintf (lokfil, "%s %s", LOCKFILE, version);
+X  (void) sprintf (newfil, "%s/rgmdelta%s", RGMDIR, version);
+X.
+X2c
+X * scorefile.c: Rog-O-Matic XIV (CMU) Sat Feb 23 20:35:56 1985 - wel
+X.
+Xw
+Xq
+X-*-END-*-
+Xecho Changing search.c
+Xed - search.c << '-*-END-*-'
+X388c
+X	(void) dwait (D_SEARCH, "Searchto: target value %d.", moveval[r][c]);
+X.
+X369c
+X      { (void) dwait (D_SEARCH, "Searchto: evaluate failed.");
+X.
+X337c
+X        (void) dwait (D_SEARCH, "Searchto: at queue break, cont=%d, havetarget=%d",
+X.
+X327,328c
+X      { if (havetarget) (void) dwait (D_SEARCH, "Searchto wins.");
+X	else (void) dwait (D_SEARCH, "Searchto fails.");
+X.
+X265c
+X  (void) dwait (D_SEARCH, "Searchfrom wins.");
+X.
+X211c
+X    { (void) dwait (D_SEARCH, "Validatemap: direction in map invalid.");
+X.
+X207c
+X    { (void) dwait (D_SEARCH, "Validatemap: existing map validated.");
+X.
+X203c
+X    { (void) dwait (D_SEARCH, "Validatemap: map invalidated.");
+X.
+X198c
+X    { (void) dwait (D_SEARCH, "Validatemap: evaluate failed.");
+X.
+X189c
+X  { (void) dwait (D_SEARCH, "Validatemap: evalinit failed.");
+X.
+X176c
+X  { (void) dwait (D_SEARCH, "Validatemap: direction in map invalid.");
+X.
+X170c
+X  { (void) dwait (D_SEARCH, "Validatemap: move type mismatch, map invalid.");
+X.
+X167c
+X  (void) dwait (D_CONTROL | D_SEARCH, "Validatemap: type %d", movetype);
+X.
+X143c
+X      currentarmor != NONE && willrust (currentarmor) && takeoff ())
+X.
+X107c
+X      onrc (HALL|BEEN, targetrow, targetcol) != (HALL|BEEN) &&
+X.
+X99c
+X  { (void) dwait (D_ERROR, "Followmap: direction invalid!");
+X.
+X68c
+X  { (void) dwait (D_SEARCH, "Findmove: evalinit failed."); return (0); }
+X.
+X61c
+X  (void) dwait (D_SEARCH, "Findmove: computing new search path.");
+X.
+X2c
+X * search.c: Rog-O-Matic XIV (CMU) Sat Feb 23 20:35:56 1985 - wel
+X.
+Xw
+Xq
+X-*-END-*-
+Xecho Changing setup.c
+Xed - setup.c << '-*-END-*-'
+X130c
+X    (void) kill (child, SIGKILL);
+X.
+X121c
+X    (void) sprintf (rp, "%d", child);
+X.
+X106,107c
+X    (void) putenv ("TERMCAP", ROGUETERM);
+X    (void) putenv ("ROGUEOPTS", ropts);
+X.
+X101,104c
+X  { (void) close (0);
+X    (void) dup (ptc[READ]);
+X    (void) close (1);
+X    (void) dup (ctp[WRITE]);
+X.
+X84,85c
+X  (void) sprintf (roguename, "Rog-O-Matic %s for %s", RGMVER, getname ());
+X  (void) sprintf (ropts, "name=%s,%s,%s,%s,%s,%s,%s,%s,%s,%s",
+X.
+X82c
+X  (void) sprintf (options, "%d,%d,%d,%d,%d,%d,%d,%d",
+X.
+X29c
+X  char  *rfile = "", *rfilearg = "", options[32], *getname();
+X.
+X2c
+X * setup.c: Rog-O-Matic XIV (CMU) Sat Feb 23 20:35:56 1985 - wel
+X.
+Xw
+Xq
+X-*-END-*-
+Xecho Changing stats.c
+Xed - stats.c << '-*-END-*-'
+X145c
+X  (void) sscanf (buf, "%d %lf %lf %lf %lf",
+X.
+X72c
+X  (void) sscanf (buf, "%d %d", &p->fail, &p->win);
+X.
+X2c
+X * stats.c: Rog-O-Matic XIV (CMU) Sat Feb 23 20:35:56 1985 - wel
+X.
+Xw
+Xq
+X-*-END-*-
+Xecho Changing strategy.c
+Xed - strategy.c << '-*-END-*-'
+X1107c
+X      (void) dwait (D_BATTLE, "Archmonster failed in archery.");
+X.
+X1104c
+X    { (void) dwait (D_BATTLE, "Arching at %c at (%d,%d)",
+X.
+X1015c
+X      (goupstairs (RUNNING) || godownstairs (RUNNING)))
+X.
+X905c
+X  { (void) dwait (D_BATTLE, "Switching to sword [3]"); return (1); }
+X.
+X895c
+X      (void) throw (obj, mdir);
+X.
+X859c
+X    (void) dwait (D_BATTLE, "Waiting to see if he is awake...");
+X.
+X646c
+X      wearing ("regeneration") == NONE &&
+X.
+X638c
+X      wearing ("regeneration") == NONE &&
+X.
+X623c
+X      wearing ("sustain strength") == NONE &&
+X.
+X615c
+X      wearing ("sustain strength") == NONE &&
+X.
+X604c
+X      wearing ("maintain armor") == NONE &&
+X.
+X533c
+X         turns < 2 && wearing ("sustain strength") == NONE) ||
+X.
+X520c
+X  { (void) dwait (D_BATTLE, "Battlestations: hitting from scaremonster.");
+X.
+X513c
+X  { (void) dwait (D_BATTLE, "Switching to sword [2]"); return (1); }
+X.
+X504c
+X  (void) dwait (D_BATTLE,
+X.
+X492c
+X    (void) dwait (D_BATTLE, "Battlestations: resting, on scaremonster.");
+X.
+X445c
+X    (void) dwait (D_BATTLE, "Aftermelee: waiting for %d rounds.", foughtmonster);
+X.
+X384c
+X    (void) dwait (D_BATTLE, "Waiting for monster an odd number of squares away...");
+X.
+X382c
+X  if ((closest&1) == 0 && !lyinginwait)
+X.
+X356c
+X      { (void) dwait (D_BATTLE, "Chasing %c(%d) rather than %c(%d) at distance %d.",
+X.
+X294c
+X  (void) dwait (D_BATTLE, "Attacking %s(%d) direction %d (total danger %d)...", 
+X.
+X286c
+X  { (void) dwait (D_BATTLE, "Adjacent, but no direction known!");
+X.
+X278c
+X    (void) dwait (D_BATTLE, "Lying in wait...");
+X.
+X246c
+X      (void) dwait (D_BATTLE, "%c <%d,%d>, danger %d, worst %c(%d,%d), total %d",
+X.
+X164c
+X  { (void) dwait (D_ERROR, "Stairs moved!"); unset (STAIRS); findstairs (NONE, NONE); return (1); }
+X.
+X59c
+X  { (void) dwait (D_BATTLE, "Switching to sword [1]"); return (1); }
+X.
+X34c
+X  (void) dwait (D_CONTROL, "Strategizing...");
+X.
+X2c
+X * strategy.c: Rog-O-Matic XIV (CMU) Sat Feb 23 20:35:56 1985 - wel
+X.
+Xw
+Xq
+X-*-END-*-
+Xecho Changing survival.c
+Xed - survival.c << '-*-END-*-'
+X222c
+X  { (void) dwait (D_BATTLE, "Back to the door..."); return (1); }
+X.
+X219c
+X    (void) dwait (D_BATTLE, "backtodoor: next to door, have time");
+X.
+X216c
+X    (void) dwait (D_BATTLE, "Not backing up, on scare monster scroll!");
+X.
+X213c
+X    (void) dwait (D_BATTLE, "backtodoor: monsters not moving");
+X.
+X172c
+X  (void) dwait (D_BATTLE, "Pinned!!!!");
+X.
+X168c
+X  { if (!goupstairs (RUNNING)) (void) godownstairs (RUNNING); 
+X.
+X163c
+X  { (void) dwait (D_BATTLE, "Not unpinning, on scare monster scroll!");
+X.
+X119c
+X  (void) dwait (D_BATTLE | D_SEARCH, "Run away!!!!");
+X.
+X115c
+X  { (void) dwait (D_BATTLE, "Not running, on scare monster scroll!");
+X.
+X2c
+X * survival.c: Rog-O-Matic XIV (CMU) Sat Feb 23 20:35:56 1985 - wel
+X.
+Xw
+Xq
+X-*-END-*-
+Xecho Changing tactics.c
+Xed - tactics.c << '-*-END-*-'
+X791c
+X  { (void) dwait (D_BATTLE, "Switching to sword [4]"); return (1); }
+X.
+X322c
+X  (void) dwait (D_PACK, "Handlering: ring1 %d, ring2 %d, left %d, right %d", 
+X.
+X277c
+X  { (void) prepareident (pickident (), obj);
+X.
+X246,247c
+X         (obj2 = haveother (scroll, obj)) != NONE))))
+X  { (void) prepareident (obj2, obj);
+X.
+X236c
+X  { (void) prepareident (currentweapon, obj);
+X.
+X228c
+X  { (void) prepareident (obj2, obj);
+X.
+X63c
+X  (void) dwait (D_PACK, "handlearmor: obj %d, currentarmor %d", obj, currentarmor);
+X.
+X2c
+X * tactics.c: Rog-O-Matic XIV (CMU) Sat Feb 23 20:35:56 1985 - wel
+X.
+Xw
+Xq
+X-*-END-*-
+Xecho Changing things.c
+Xed - things.c << '-*-END-*-'
+X241c
+X  if (++slistlen >= MAXSTUFF) (void) dwait (D_FATAL, "Too much stuff");
+X.
+X177c
+X  { (void) dwait (D_ERROR, "Trying to throw %c", LETTER (obj)); 
+X.
+X159c
+X  { (void) dwait (D_ERROR, "Trying to point %c", LETTER (obj)); 
+X.
+X142c
+X  { (void) dwait (D_ERROR, "Trying to read %c", LETTER (obj)); 
+X.
+X125c
+X  { (void) dwait (D_ERROR, "Trying to quaff %c", LETTER (obj)); 
+X.
+X39c
+X  { (void) dwait (D_ERROR, "Trying to take off armor we don't have on!");
+X.
+X21c
+X  { (void) dwait (D_FATAL, "Trying to put on a second coat of armor");
+X.
+X2c
+X * things.c: Rog-O-Matic XIV (CMU) Sat Feb 23 20:35:56 1985 - wel
+X.
+Xw
+Xq
+X-*-END-*-
+Xecho Changing utility.c
+Xed - utility.c << '-*-END-*-'
+X382a
+X/*VARARGS2*/
+X.
+X376c
+X{ (void) unlink (lokfil);
+X.
+X361c
+X  if (time ((time_t *) NULL) - statbuf.st_mtime > maxtime)
+X.
+X357c
+X  { (void) creat (lokfil, NOWRITE);
+X.
+X344c
+X  extern time_t time ();
+X.
+X327,329c
+X  if (signal (SIGINT, SIG_IGN) != SIG_IGN)  (void) signal (SIGINT, exitproc);
+X  if (signal (SIGPIPE, SIG_IGN) != SIG_IGN) (void) signal (SIGPIPE, exitproc);
+X  if (signal (SIGQUIT, SIG_IGN) != SIG_IGN) (void) signal (SIGQUIT, exitproc);
+X.
+X315,317c
+X  (void) signal (SIGHUP, SIG_DFL);
+X  (void) signal (SIGINT, SIG_DFL);
+X  (void) signal (SIGQUIT, SIG_DFL);
+X.
+X304,306c
+X  (void) signal (SIGHUP, hstat);
+X  (void) signal (SIGINT, istat);
+X  (void) signal (SIGQUIT, qstat);
+X.
+X276a
+Xchar *f;
+X.
+X256c
+X  (void) umask (oldmask);
+X.
+X237c
+X  env = (char **) realloc ((char *) environ, (unsigned) (esize * sizeof (*env)));
+X.
+X223c
+X    (void) strcpy (elem, environ[i]);
+X.
+X219c
+X  { elem = malloc ((unsigned) (strlen (environ[i]) + 1));
+X.
+X214c
+X  env = (char **) malloc ((unsigned) (esize * sizeof (elem)));
+X.
+X210a
+X  extern char *strcpy ();
+X.
+X173c
+X    (void) sprintf (p, "%s=%s", name, value);/* copy into env. */
+X.
+X169c
+X	  (unsigned) (strlen (name) + strlen (value) + 2));
+X.
+X161c
+X      p = malloc ((unsigned) (strlen (name) + strlen (value) + 2));
+X.
+X84c
+X  (void) getpw (getuid (), name);
+X.
+X36c
+X  (void) gtty (fileno (stdin), &sg);
+X.
+X2c
+X * utility.c: Rog-O-Matic XIV (CMU) Sat Feb 23 20:35:56 1985 - wel
+X.
+Xw
+Xq
+X-*-END-*-
+/
+echo 'Rgm XIV mods 02/23/85 - ed scripts complete.'
+exit 0
+
+

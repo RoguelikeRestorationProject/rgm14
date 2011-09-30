@@ -1,0 +1,123 @@
+Article 4677 of net.sources:
+Path: plus5!wucs1!cuae2!ihnp4!ptsfa!lll-lcc!seismo!rochester!pt.cs.cmu.edu!cad.cs.cmu.edu!mlm
+From: mlm@cad.cs.cmu.edu (Michael Mauldin)
+Newsgroups: net.sources
+Subject: Rogomatic Update / User survey
+Keywords: rogomatic rogue survey source status
+Message-ID: <1050@cad.cs.cmu.edu>
+Date: 16 Feb 87 22:50:28 GMT
+Organization: Carnegie-Mellon University, CS/RI
+Lines: 109
+Posted: Mon Feb 16 17:50:28 1987
+
+There are three parts to this message, one or more may apply to you:
+
+  o Current status of Rogomatic
+  o Availability of source
+  o User survey request		*** all Rogomatic users please read ***
+
+------------------------------------------------------------------------------
+
+1. Current Status of Rogomatic
+
+
+I have gotten some requests for the "latest" version of Rogomatic.
+The latest version is still Rog-O-Matic XIV, which is over a year old.
+This version plays Rogue 3.6, 5.2, and 5.3.  It does not play Rogue
+5.4, Urogue, hack, moria, or larn.  Here are the total winners I have
+been told about:
+
+  Damon Permezel <allegra!watmath!dapermezel@Berkeley>, Rogue 5.2
+  Oct 10, 1983 dapermez    2347 total winner       26  74   18  -5 14/58312 
+
+  Dan Reynolds <dan@ut-ngp.ARPA>, Rogue 5.3
+  Feb 16, 1984 reynolds   11316 total winner       26 100   20  10 13/34121
+
+  Ewald Detjens <seismo!philabs!prls!detjens@rochester.arpa>, Rogue 5.3
+  Mar 15, 1985 wolsheim   12305 total winner       26  97   23  -4 14/77333
+
+  Troy Torgerson <ttorgers%udenver.csnet@CSNET-RELAY.ARPA>, Rogue 5.2
+  Jun 23, 1986 ttorgers   14857 total winner       26
+
+The program is not currently under active development, and is in fact
+only weakly supported by me.  There are reportedly efforts underway
+around the globe to port Rogomatic to other versions of Rogue and Hack.
+Nobody has reporeted success to me.
+
+------------------------------------------------------------------------------
+
+2. Availability of sources
+
+
+Three things are avilable to any and all who ask
+
+  o the source to Rogomatic XIV			netmail or FTP
+  o the source to Rogue 3.6			netmail or FTP
+  o CMU Technical report CMU-CS-83-144		US Post
+
+FTP users may access G.CS.CMU.EDU, account 'ftpguest', password 'cmunix'
+There are two files of interest:
+
+	mlm/rgm/rgm14.tar.Z	compressed tar file of Rogomatic XIV source
+	mlm/rgm/rog36.tar.Z	compressed tar file of Rogue 3.6 source
+
+If you use FTP to get a copy of either of these files, please send me
+mail indicating that you have a copy of Rogomatic and/or Rogue.  This
+is the only stipulation in the Copyright notice: YOU MUST NOTIFY ME
+THAT YOU HAVE ROGOMATIC!  This is mainly for my own amusement (so I can
+update my "Rogomatic conquers the world" map, and so I can send mail to
+all Rogomatic users).  You are welcome to copy/modify/redistribute
+Rogomatic (but not Rogue), so long as the recipient(s) obey the
+notifictiation requirement.
+
+If you cannot access FTP, the sources are available by netmail.  To
+receive the sources by mail, send me netmail, and provide a return path
+that does not go through SEISMO (they have requested that I not send
+Rogomatic through their machine).  Rogomatic is shipped as 12 shar
+files each about 42k bytes long.
+
+
+Finally, the Technical Report "ROGOMATIC: A Belligerent Expert System"
+is available for free by US Mail.  Just send me a note requesting the
+tech report and giving a valid physical mail address.
+
+------------------------------------------------------------------------------
+
+3. User survey, all Rogomatic users
+
+
+If you have a copy of Rogomatic (or just run the copy at your site),
+please fill out the following form and send it in the mail with the
+words "rogomatic survey" in the subject line.
+
+Name:			____________________
+Net address:		____________________
+Site:			____________________
+Rogue version:		____________________ (eg: 3.6, 5.2, or 5.3)
+Best score:		____________________
+City/State/Country:	____________________ (eg: Pittsburgh/PA/USA)
+Longitude:		____________________ (eg: 80 00 00 W)
+Latitude:		____________________ (eg: 40 26 19 N)
+
+If you would be so kind, include the following additional information:
+
+  o The output of "rogue -s" at your site
+  o The output of "rogomatic -s | head -20" at your site
+  o The output of "gene -f" at your site
+
+If you can't get mail back to me, print out the results and send me US Mail.
+
+Foreign Users:  at least fill out the first part of the form; I really
+want to know which countries are running Rogmatic.
+
+I plan to collect all of this information to put together (1) an
+analysis of how well Rogomatic actually plays, and (2) the best possible
+gene pool.  Be a part of the largest distributed computation in history!
+
+------------------------------------------------------------------------------
+
+Michael L. Mauldin (Fuzzy)		Department of Computer Science
+ARPA: Michael.Mauldin@CAD.CS.CMU.EDU	Carnegie-Mellon University
+Phone: (412) 268-3065			Pittsburgh, PA  15213-3890
+
+

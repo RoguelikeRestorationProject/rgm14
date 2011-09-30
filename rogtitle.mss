@@ -1,0 +1,18 @@
+@specialfont(f1="oldenglish10")
+@specialfont(f2="oldenglish18")
+@specialfont(f3="oldenglish36")
+@blankspace(1in)
+@begin(f3)
+@center(Rogue 3.6)
+@end(f3)
+@blankspace(1in)
+@begin(f2)
+The old standard Rogue 3.6, created by Glen Wichman and Michael Toy.
+@end(f2)
+@blankspace(1in)
+@f2(Authors:)
+@begin(itemize)
+@f2(@>Michael Toy)
+
+@f2(@>Ken Arnold)
+@end(itemize)

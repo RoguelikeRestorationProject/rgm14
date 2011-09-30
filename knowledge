@@ -1,0 +1,157 @@
+        Rog-O-Matic Knowledge: - to be added, * already known
+
+Done:
+
+* Add synchronization to the Rogomatic.log file in quitrogue.
+* Allow for Rust monsters on Level 8 in treasure rooms.
+* Always wield best weapon, considering average damage to be done.
+* Assume that unknown traps are teleport traps (since we know all others).
+* Backup into doors when facing multiple monsters.
+* Before running if you need to get around monster:  slow monster, haste self.
+* Change trap flags for monsters to monster flags.
+* Check whether the monster killed by shootindark is the right one.
+* Determine whether we are being held, so we can back off and shoot Fungi.
+* Don't "Wait for victims" when running away! [Don't at all in 5.2]
+* Don't always attack sleeping monsters.
+* Don't bother with unknown armor whose base class isn't better than yours.
+* Don't drink gain strength unless you are at maximum strength.
+* Don't drop unidentified scrolls and potions -- use them
+* Don't ever consider unknown armor best. Wear it first!
+* Don't genocide invisible stalkers if have ring of see invisible.
+* Don't put on see invisible before level 16.
+* Don't read an unknown scroll if you don't know what identify is and you ...
+* Don't step back out of a room.
+* Don't stepback onto a trap.
+* Don't use rings of regeneration below explevel 9.
+* Don't use unknown scrolls and potions before level 8 unles pack is full
+* Don't wear add strength unless you get a bonus for it!
+* Don't wear maintain armor when your armor is cursed (so you can't change it)
+* Don't wear rings if you can't afford the food.
+* Dont pick up things far away when no scrolls of scaremonster on the ground.
+* Dont wear multiple rings of invisible, maintain, etc.
+* Drink potions to identify them.
+* Drop junky items when you need to.
+* Fix "gots to know" syndrome.
+* Fix diagonal movement in FIGHTMONSTER.
+* Fix the dancing double orc bug.
+* Fix updateat to be more discriminating about teleportation.
+* Fixed fight & to monsters to give direction to monster when on a door.
+* Have it move to corners and throw away useless arrows. (3.6)
+* Have it move to corners to read unknown scrolls (create monster). (3.6)
+* Have it take one [few] hit[s] from monster to escape death situation.
+* If wearing see invisible and being stalked, take off and put on ring.
+* In grope, check for traps before stepping on a square.
+* Keep a potion of healing for a rainy day until you have been blind.
+* Keep pack full by picking up junk when you have room.
+* Keep track of where you drop scrolls of scaremonster. Use them!
+* Loss of synchronization. Problem with interrupts/form feeds.
+* Measure amount of level searched, so we can blow off the rest of it.
+* Modify archery decisions by strength/other bonuses.
+* Move ATTACKSLEEP in front of doorexplore.
+* Prefer to try various armor when have remove curse.
+* Print message about waking sleepers on stairs.
+* Put on best armor when reading unknown scrolls and armor++ scrolls.
+* Read scrolls to identify them.
+* Remember that -5 armor can't rust.
+* Remember whether you have read a certain scroll before.
+* Remove good armor when fighting a lone rust monster!
+* Replace keyact.h with something sensible.
+* Strength management.
+* Take off rings of add strength before quaffing restore strength [jel].
+* Understand mapping scrolls better.
+* Understand new weapon statistics.
+* Use before battle: cancellation.
+* Use before battle: confuse, extra healing
+* Use before battle: magic missile
+* Use before battle: striking, lightning, fire, cold, drainlife, slowmonster.
+* Use during battle: haste self, staffs, slow monster
+* Use during battle: hold monster, teleportation, extra healing.
+* Use identify scrolls on rings and wands.
+* Use identify scrolls on unknown weapon when wielding it.
+* Use ring of regeneration only while resting up.
+* Use unknown wands and identify them from the results.
+* Use while in danger: scare monster
+* Use: magic mapping if no cycles.
+* Wear your best armor below level 19 and above level 9. [Yeah! mlm]
+* Wear your best two rings.
+* remove redundant arrowtrap code from getrogue.
+* Rest away from door in lit rooms (to arch at monster).
+
+Changes from Version XII to Version XIII:
+
+* Don't run through a door until monster is adjacent
+* Don't pick up scare monster when pack not full.
+* Check whole string (not just prefixes) in database.c
+* Don't step on traps or monsters when cheating (Rogue 3.6)
+* In lit rooms, rest far from doors (arch things that come in)
+* Do sanity check before unlinking old score files
+* Add single level replay ability
+* Don't allow multiple inventory commands (i.e. check for pending commands)
+* Remember that monsters stay awake when polymoprhed.
+* Replace older (correct) mapinfer routine
+* Don't want to wake Umber Hulks or Purple Worms
+* Don't grope now that fightinvisible() exists
+* Don't bother to infer "zapping", since a new 'i' command tells all
+* Be more selective about polymorph targets
+* Don't worry about wimpy monsters when running from big ones.
+
+Wish List:
+
+- Check "path to room" for searching walls, not just "room known".
+- Notice door on opposite wall when searching for "path to room".
+* Find out why it doesn't always hit fungi first!
+- Add lost monster code.
+- Add paradigmatic monster/situation analysis.
+- Do "Incremental Searching" for secret doors.
+- Have it infer create monster if a monster shows up.
+- Have it infer hold monster if it knows create monster.
+- Make r-m smarter about which walls are worth looking at.
+- Put common code to dwait and play into a single function.
+- Put on cursed stuff before reading unknown scrolls if you don't know what...
+- Speed up expval (5-7% of all time in expval).
+- Speed up searchto (28-35% of all time in searchto).
+
+* Fix secret door searching (move three squares)
+* Test move (rather than makemove)
+* Unpin first, then fight
+* Fix trap acquisition code
+
+Modified for Rogue 5.2:
+
+* Added Rogomatic version to rogomatic scoreboard
+* Added ring of "maintain armor"
+* Added userid to Rogue Name (Rog-O-Matic <version> for <uid>).
+* Ammended cheat heuristics to consider version. No known bugs in 5.2 yet.
+* Automatic version detection (complete compatiblity).
+* Don't add revvideo monsters to monster list.
+* Don't attack Floating Eyes anymore (they can be deadly).
+* Don't wield striking. It now uses up a charge when you hit.
+* Fixed terpbot to handle maxstrength.
+* Fixed trailing dots in mess.c.
+* Modified armor strategy to take "maintain armor" ring into account.
+* Modified genocide order. Now "UDVPXWITMFYCQRAHJGLNOSZBE".
+* Lower case all messages in mess.c, to simplify it.
+* Try to light up treasure rooms.
+
+Rogue 5.2 bugs:
+
+  The ring bug still seems to appear in R5.2. Last night Rogo was wearing
+  a ring of sustain strength, which was stolen by a nymph. When he tried
+  next to use a ring, he was out of synch with Rogue (and maybe Rogue was
+  out of touch with the world anyway). Interrupting didn't help.
+
+  Wand of striking bug, doesn't buy anything.
+
+
+Rogue 5.2a:
+
+* Poison and extra healing cure cosmic.
+- What does a wand of invisiblity do?
+
+
+Things to fix for Rogue53:
+
+- Better knowledge of Level geometry, when to search for doors
+- Learning of special attacks
+- General learning of strategies (hah!)
+- Explore levels in a goal directed manner -- affects findrooms()

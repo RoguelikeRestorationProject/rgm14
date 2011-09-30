@@ -1,0 +1,7 @@
+#!/bin/sh
+#
+# hplot: Rog-O-Matic XIV (CMU) Thu Jul  3 16:35:59 1986 - mlm
+# Copyright (C) 1985 by A. Appel, G. Jacobson, L. Hamey, and M. Mauldin
+#
+/usr/misc/.rogomatic/bin/rogomatic -s | \
+	/usr/misc/.rogomatic/bin/histplot $*

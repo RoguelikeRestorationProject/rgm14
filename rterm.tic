@@ -1,0 +1,7 @@
+rg|rterm|Rog-O-Matic Pseudo Terminal, 
+	am, db, xenl, 
+	cols#80, it#8, lines#24, 
+	bel=^G, clear=^L, cr=^M, cub1=^H, cud1=\E<, 
+	cup=\Ea%p1%' '%+%c%p2%' '%+%c, cuu1=\E;, el=\E^S, ht=^I, 
+	ind=^J, kbs=^H, kcub1=^H, kcud1=^J, nel=^M^J, rmso=\Ed, 
+	smso=\ED, 

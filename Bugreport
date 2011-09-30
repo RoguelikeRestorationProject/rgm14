@@ -1,0 +1,133 @@
+/*
+ * Bugreport: Rog-O-Matic XIV (CMU) Wed Mar 20 10:04:14 1985 - mlm
+ * Copyright (C) 1985 by A. Appel, G. Jacobson, L. Hamey, and M. Mauldin
+ */
+
+1. fails to wear any armor below level 7.
+
+	things.c:willrust()		changed itemis(PROTECTED)
+	tactics.c:handlearmor()		dont worry about cursed armor
+
+
+2. histplot and rplot are flaky (reported by AEB (play@turing)).
+
+	rplot				removed file name
+	gene.c				fixed "Usage" message
+	histplot.c			fixed bugs
+	README				documented ancilliary functions
+
+3. utility.c uses "getpw (getuid (), name)", which according to
+   Rick Adams @ Seismo is obsolete.  no fix made here.  Caveat Emptor!
+
+4. Armor handling again.  Fails to track current armor under Rogue 3.6
+   and Rogue 5.2 (bug reported by Dennis Ritchie).
+
+	things.c:wear(),takeoff()	added usesynch=0 (ie: get new invent)
+	tactics.c:handlearmor()		new strategy, includes 3rd best
+
+5. Failed to handle "cursed armor" message in Rogue 3.6 / 5.2.  Fixed.
+
+	mess.c:terpmes()		modified cursed mesage pattern
+
+6. Drops good, known items rather than quaffing/reading them
+
+	things.c:drop()			read/quaff some things
+
+7. Too often throws good armor away to keep mediocre scrolls.
+
+	worth.c:worth()			values armor more highly.
+
+8. Peter Wan reports problems with screen handling on terminals with
+   no tabs.  Jeff Anton at Berkeley replies that putting "GT=0"
+   after the call to initscr() in main.c will force curses to use
+   spaces or cursor positioning, so this hack will make the program
+   work on terminals without tabs.
+
+9. Fixed reply command to understand version messages at start of
+   log files. Modified to send version command when starting a
+   log in the middle of the game.
+
+	io.c:getrogver()		look for version string in log
+	io.c:toggleecho()		send version command
+	mess.c:terpmes()		ignore version commands
+
+10. Fails to fight invisible stalkers properly
+
+	strategy.c:fightinvisible()	fixed old conversion bug
+	search.c:followmap()		don't call fmove when beingstalked
+
+11. Doesn't recognize scrolls/wands of light in corridors
+
+	mess.c:terpmes()		added message about "corridor glows"
+
+12. Added debugging command about rustproof armor
+
+	arms.c:havearmor()		new flag 'rustproof'
+	main.c:main()			new command ']'
+
+13. Fails to properly print message about genocided monsters.
+
+	io.c:statusline()		added missing %s to printf format
+
+14. Updated version message to take replaying into account
+
+	main.c:main()			new message
+
+15. Makefile does not include several dependencies on install.h
+
+	makefile			io, ltm, tactics, utility
+
+16. Sometimes gives extra message when doing an inventory.  Modified
+    inventory to return true if it printed a message because an item
+    listed has a remembered value substituted by the database routine.
+
+	pack.c:inventory()		now returns true is msg printed
+	mess.c:terpmes()		uses value returned
+
+17. Reduced time groping when blind
+
+	strategy.c:stragize()		cut from 100 turns to 50
+
+18. Modified scroll handling, now reads scrolls even when in plunge
+    mode.  Also fixed a bug with the 'aggravate monsters' check.
+
+	tactics.c:readscroll()		added missing s to "aggravate monster"
+
+19. If it finds a trap door when on the way back up between 26 and 18,
+    it runs DOWN the trap door (stupid, stupid!).
+
+	tactics.c:plunge()		dont if have(amulet)
+
+20. Modified sanity check for identify scrolls.  Don't have to plan
+    ahead in Rogue 5.3, so sanity check doesn't apply.
+
+	mess.c:readident()		change 'version <= RV53A' to '<'
+
+21. Remember that leather armor rusts in Rogue 3.6.
+
+	things.c:willrust()		check for Rogue 3.6
+
+22. Fails to work on Pyramids
+
+	Pyramids will not assume that missing arguments are zero.
+	Delinted the whole program to check for missing arguments
+	to various functions.
+
+23. Core dumps when searching for secret doors on 3.6
+
+	Failed to check the return code form whichroom() in explore.c
+
+24. Several local variable definitions obscure global variables.
+
+	Modified the local variables not to clash with the globals.
+
+25. Runs over scare monster scolls on low levels.
+
+	When moving more than one square at a time, check for
+	running over scare monster scrolls along the way.
+
+26. Nymph misspelled in strategy.c
+
+27. Added SIGPIPE to list of interrupts which are held when modifying
+    the score file.
+

@@ -1,0 +1,340 @@
+/*
+ * rnotes: Rog-O-Matic XIV (CMU) Sun Feb 10 22:21:03 1985 - mlm
+ * Copyright (C) 1985 by A. Appel, G. Jacobson, L. Hamey, and M. Mauldin
+ */
+
+Purpose:	Notes on the Rogue Game for Rog-O-Matic XIV Development
+Author:		Michael L. Mauldin
+
+	This file contains information about various objects and
+	threats in the game of Rogue.  Some of these facts were
+	gleaned by human experience, some by observation, and
+	a few by statistics kept by earlier versions of Rog-O-Matic.
+	These apply to version 3.6, 5.2, and 5.3 of Rogue.
+
+Potions
+
+	confusion
+	paralysis
+	poison
+	gain strength
+	see invisible		apricot juice
+	healing
+	monster detection
+	magic detection
+	raise level		feel skillful
+	extra healing
+	haste self
+	restore strength
+	blindness
+	thirst quenching
+
+Scrolls
+
+	monster confusion	your hands glow red
+	magic mapping
+	light
+	hold monster
+	sleep
+	enchant armor
+	identify
+	scare monster		you hear maniacal laughter
+	gold detection		strange feeling, then it passes
+	teleportation
+	enchant weapon		weapon glows blue
+	create monster
+	remove curse		you feel as if someone was watching
+	aggravate monsters	you hear a high pitched humming
+	blank paper
+	genocide
+
+Rings
+
+	protection
+	add strength
+	sustain strength
+	searching
+	see invisible
+	adornment
+	aggravate monster
+	dexterity
+	increase damage
+	regeneration
+	slow digestion
+	teleportation
+	stealth
+
+Monsters
+
+Name			Carry	Flag       Exp  Lvl  Amr  Dmg
+
+	giant ant               0       mean        10    2    3  1d6
+	bat                     0       0            1    1    3  1d2
+	centaur                 15      0           15    4    4  1d6/1d6
+	dragon                  100     mean      9000   10   -1  1d8/1d8/3d10
+	floating eye            0       0            5    1    9  0d0
+	violet fungi            0       mean        85    8    3  000d0
+	gnome                   10      0            8    1    5  1d6
+	hobgoblin               0       mean         3    1    5  1d8
+	invisible stalker       0       invis      120    8    3  4d4
+	jackal                  0       mean         2    1    7  1d2
+	kobold                  0       mean         1    1    7  1d4
+	leprechaun              0       0           10    3    8  1d1
+	mimic                   30      0          140    7    7  3d4
+	nymph                   100     0           40    3    9  0d0
+	orc                     15      block        5    1    6  1d8
+	purple worm             70      0         7000   15    6  2d12/2d4
+	quasit                  30      mean        35    3    2  1d2/1d2/1d4
+	rust monster            0       mean        25    5    2  0d0/0d0
+	snake                   0       mean         3    1    5  1d3
+	troll                   50      regen,mean  55    6    4  1d8/1d8/2d6
+	umber hulk              40      mean       130    8    2  3d4/3d4/2d5
+	vampire                 20      regen,mean 380    8    1  1d10
+	wraith                  0       0           55    5    4  1d6
+	xorn                    0       mean       120    7   -2  1d3/1d3/1d3/4d6
+	yeti                    30      0           50    4    6  1d6/1d6
+	zombie                  0       mean         7    2    8  1d8
+
+Weapons (3.6):
+
+	Type		Hit	Hurled	Thrown by	Features
+
+	Mace            2d4     1d3     NONE            0
+	Long sword      1d10    1d2     NONE            0
+	Bow             1d1     1d1     NONE            0
+	Arrow           1d1     1d6     BOW             ISMANY|ISMISL
+	Dagger          1d6     1d4     NONE            ISMISL
+	Rock            1d2     1d4     SLING           ISMANY|ISMISL
+	2h sword        3d6     1d2     NONE            0
+	Sling           0d0     0d0     NONE            0
+	Dart            1d1     1d3     NONE            ISMANY|ISMISL
+	Crossbow        1d1     1d1     NONE            0
+	Crossbow bolt   1d2     1d10    CROSSBOW        ISMANY|ISMISL
+	Spear           1d8     1d6     NONE            ISMISL
+
+Armor:
+
+	leather armor 8
+	ring mail 7
+	studded leather armor 7
+	scale mail 6
+	chain mail 5
+	splint mail 4
+	banded mail 4
+	plate mail 3
+
+: (food)
+	0 - food
+	1 - fruit
+
+) (weapon)
+	0 - mace
+	1 - long sword
+	2 - short bow
+	3 - arrow
+	4 - dagger
+	5 - rock
+	6 - two handed sword
+	7 - sling
+	8 - dart
+	9 - crossbow
+	a - crossbow bolt
+	b - spear
+
+] (armor)
+	0 "leather armor",
+	1 "ring mail",
+	2 "studded leather armor",
+	3 "scale mail",
+	4 "chain mail",
+	5 "splint mail",
+	6 "banded mail",
+	7 "plate mail",
+
+? (scroll)
+	0 - monster confusion    8, 170
+	1 - magic mapping        5, 180
+	2 - light               10, 100
+	3 - hold monster         2, 200
+	4 - sleep                5,  50
+	5 - enchant armor        8, 130
+	6 - identify            21, 100
+	7 - scare monster        4, 180
+	8 - gold detection       4, 110
+	9 - teleportation        7, 175
+	a - enchant weapon      10, 150
+	b - create monster       5,  75
+	c - remove curse         8, 105
+	d - aggravate monsters   1,  60
+	e - blank paper          1,  50
+	f - genocide             1, 200
+
+! (potion)
+	0 - confusion            8,  50
+	1 - paralysis           10,  50
+	2 - poison               8,  50
+	3 - gain strength       15, 150
+	4 - see invisible        2, 170
+	5 - healing             15, 130
+	6 - monster detection    6, 120
+	7 - magic detection      6, 105
+	8 - raise level          2, 220
+	9 - extra healing        5, 180
+	a - haste self           4, 200
+	b - restore strength    14, 120
+	c - blindness            4,  50
+	d - thirst quenching     1,  50
+
+= (ring)
+	0 - protection           9, 200
+	1 - add strength         9, 200
+	2 - sustain strength     5, 180
+	3 - searching           10, 200
+	4 - see invisible       10, 175
+	5 - adornment            1, 100
+	6 - aggravate monster   11, 100
+	7 - dexterity            8, 220
+	8 - increase damage      8, 220
+	9 - regeneration         4, 260
+	a - slow digestion       9, 240
+	b - telportation         9, 100
+	c - stealth              7, 100
+	d - maintain             only in 5.2
+
+/ (wand)
+	0 - light            12, 120	"the room is lit", "the corridor..."
+	1 - striking          9, 115	"you [hit/miss]" with no projectile
+	2 - lightning         3, 200	"bolt misses", "the bolt hits..."
+	3 - fire              3, 200	"flame misses", "the flame hits..."
+	4 - cold              3, 200	"ice misses", "the ice hits..."
+	5 - polymorph        15, 210
+	6 - magic missile    10, 170	"missile vanishes", "you hit"
+	7 - haste monster     9,  50
+	8 - slow monster     11, 220
+	9 - drain life        9, 210	"you have a tingling feeling"
+	a - nothing           1,  70
+	b - teleport away     5, 140
+	c - teleport to       5,  60
+	d - cancellation      5, 130
+
+	Note: A wand of 'teleport to' is useful in that it will unstick you
+	from a violet fungus!
+
+Suggested algorithm for wand usage:
+
+	If you have never fired a wand, stand 3 or 4 paces from a wall and
+	fire the wand at it, making certain that no monsters are around (thus
+	the room should be lit). Depending on the message you get, you have
+	one of the following wands (46% of the time):
+
+	"the room is lit"		light
+	"missile vanishes"		magic missile
+	"bolt bounces"          	lightening
+	"flame bounces"			fire
+	"ice bounces"			cold
+	"you have a tingling feeling"	drain life
+
+	If none of these messages appear, then there are five wands you would
+	like to get and three you wouldn't.
+
+Alternate algorithm:
+
+	Find some congenial monster in a lit room. Stand three paces
+	from him and fire the wand. Easiest is to find some sleeping
+	monster besides a bat and stand four paces away, then hit him
+	with an arrow to wake him up. Note that he must be awake.  Use
+	the following results:
+
+	"the room is lit"			light
+	"you hit" with one of -\|/		lightening/fire/cold
+	different monster now two away		polymorph
+	"you hit" with *			magic missile
+	monster now adjacent			haste monster/teleport to
+	you take hits				drain life
+	monster disappears (not killed)		teleport away
+
+	monster now two paces away, sit for one turn
+
+	still two paces away		slow monster
+	now adjacent			nothing/cancellation/striking
+
+	This tells you almost everything you need to know, but you must
+	get the monster into the right place. Striking only works on
+	adjacent monsters, so this won't disambiguate it very well.
+	Also, you should probably assume the bolt weapon is fire, since
+	that way you won't be surprised by a dragon later.
+
+Special Attacks:
+
+	These variables can be affected by monsters and magic items:
+
+	Hp			Most monsters
+	Maxhp			Vampires, Wraiths
+	Gold			Leprechauns
+	Strength		Ant, Rattlesnake
+	Ac			Rust monster
+	Explev			Wraith
+	Confused		Umber hulk
+	Beingheld		Fungi
+	Paralyzed		Eye, Ice monster
+	Pack			Nymph
+
+Monster table: [Rogue 5.3]
+
+	A: aquator (1,1) [3]                    N: nymph (0,0) [4]
+	B: bat (8,3) [4]                        O: orc (24,8) [3]
+	C: centaur (46,13) [4]                  P: phantom (65,13)
+	D: dragon <13>                          Q: quagga (33,9) [5]
+	E: emu (8,3) [3]                        R: rattlesnake (9,8) [4]
+	F: venus flytrap (28,9)                 S: snake (11,4) [4]
+	G: griffin (28,15)                      T: troll (98,24) [4]
+	H: hobgoblin (23,9) [4]                 U: black unicorn (129,24)
+	I: ice monster (1,1) [3]                V: vampire (34,10) [4]
+	J: jabberwock <1>                       W: wraith (23,6)
+	K: kestrel (13,6) [3]                   X: xeroc (77,18)
+	L: leprechaun (6,12) [5]                Y: yeti (39,12) [10]
+	M: medusa (111,24)                      Z: zombie (24,10) [2]
+
+Levels on which monsters first appear: Rogue 5.3
+
+	Level 1:	KEBSH		Level 2:	I
+	Level 3:	R		Level 4:	O
+	Level 5:	Z		Level 6:	L
+	Level 7:	C		Level 8:	Q
+	Level 9:	A		Level 10:	N
+	Level 11:	Y		Level 12:	F
+	Level 13:	T		Level 14:	W
+	Level 15:	P		Level 16:	X
+	Level 17:	U		Level 18:	M
+	Level 19:	V		Level 20:	G
+	Level 21:	J		Level 22:	D
+
+Monster table: [Rogue 5.2, Rogue 3.6]
+
+	A: giant ant (8,4)                      N: nymph <4>
+	B: bat (6,2) [4]                        O: orc <4>
+	C: centaur (30,5)                       P: purple worm <4>
+	D: dragon <5>                           Q: quasit <4>
+	E: floating eye <5> [4]                 R: rust monster <4>
+	F: violet fungi <5>                     S: snake (6,3)
+	G: gnome (30,5)                         T: troll <3>
+	H: hobgoblin (30,7) [4]                 U: umber hulk <3>
+	I: invisible stalker <7>                V: vampire <3>
+	J: jackal (30,2) [4]                    W: wraith <3>
+	K: kobold (30,4) [4]                    X: xorn <3>
+	L: leprechaun <4>                       Y: yeti <3>
+	M: mimic <4>                            Z: zombie (6,7)
+
+Levels on which monsters first appear: Rogue 5.2, Rogue 3.6
+
+	Level 1:	KJBSH		Level 2:	E
+	Level 3: 	A		Level 4:	O
+	Level 5: 	Z		Level 6:	G
+	Level 7: 	L		Level 8:	C
+	Level 9: 	R		Level 10:	Q
+	Level 11: 	N		Level 12:	Y
+	Level 13: 	T		Level 14:	W
+	Level 15: 	F		Level 16:	I
+	Level 17: 	X		Level 18:	U
+	Level 19: 	M		Level 20:	V
+	Level 21: 	P		Level 22:	D
